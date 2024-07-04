@@ -1,2 +1,2 @@
 # iclinic
-Clinic Management System
+PRMSU Candelaria Clinic Management System
