@@ -35,7 +35,7 @@ const showWarningMessage = (message) => {
 };
 
 // Function to handle file input change event for profile picture
-$('#resort_permit').on('change', function() {
+$('#profile').on('change', function() {
     const fileInput = $(this)[0];
     const file = fileInput.files[0];
 
@@ -48,16 +48,16 @@ $('#resort_permit').on('change', function() {
         // Read the selected file and display the preview
         const reader = new FileReader();
         reader.onload = function(e) {
-            $('#resort_permit').attr('src', e.target.result); // Set image source to preview element
-            $('input[name="resort_permit"]').css('border', '');
+            $('#profile').attr('src', e.target.result); // Set image source to preview element
+            $('input[name="profile"]').css('border', '');
         };
         reader.readAsDataURL(file);
     } else {
         // Show warning message for invalid file type
         showWarningMessage('Please select a valid image file (PNG, JPG, WEBP).');
         permitValid = false;
-        $('#resort_permit').val(''); // Clear the file input
-        $('input[name="resort_permit"]').css('border', '1px solid red');
+        $('#profile').val(''); // Clear the file input
+        $('input[name="profile"]').css('border', '1px solid red');
     }
 });
 
@@ -77,15 +77,14 @@ nextBtn.addEventListener('click', () => {
 
     // Proceed to the next step if all required fields are filled
     if (fieldsAreValid) {
-        // Proceed with additional checks only if in the step where email is entered
-        if (current_step === 1 || current_step === 1) {
-            const emailInputName = current_step === 0 ? 'email' : 'resort_email'; // Different input name for email in step 0 and step 1
+        if (current_step === 2) {
+            const emailInputName = 'email'; // Only checking the personal email
             const email = $(`input[name="${emailInputName}"]`).val();
             const formData = new FormData();
             formData.append('email', email);
 
             $.ajax({
-                url: current_step === 0 ? './action/check_personal_email.php' : './action/check_resort_email.php',
+                url: './action/check_personal_email.php',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -100,13 +99,18 @@ nextBtn.addEventListener('click', () => {
                             $(`input[name="${emailInputName}"]`).css('border', '1px solid red'); // Add red border to email field
                         } else {
                             $(`input[name="${emailInputName}"]`).css('border', ''); // Remove red border if email doesn't exist
-                                // Check if permit picture is valid
-                                if (current_step == 1 && !permitValid) {
-                                    showWarningMessage('Please upload a valid photo of your resort permit.');
-                                    $('input[name="resort_permit"]').css('border', '1px solid red');
-                                }else{
-                                    goToNextStep(); // Proceed to the next step if email doesn't exist and picture is valid
-                                }
+                            // Check if passwords match
+                            const password = document.querySelector('input[name="password"]').value;
+                            const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
+                            if (password !== confirmPassword) {
+                                showWarningMessage("Passwords don't match. Please check and try again.");
+                                document.querySelector('input[name="password"]').style.border = '1px solid red';
+                                document.querySelector('input[name="confirm_password"]').style.border = '1px solid red'; // Add red border to confirm password field
+                            } else {
+                                document.querySelector('input[name="password"]').style.border = '';
+                                document.querySelector('input[name="confirm_password"]').style.border = ''; // Remove red border if passwords match
+                                goToNextStep(); // Proceed to the next step if passwords match
+                            }
                         }
                     } else {
                         showWarningMessage('Invalid response received from server.');
@@ -117,69 +121,15 @@ nextBtn.addEventListener('click', () => {
                     console.error(xhr.responseText);
                 }
             });
-        } else if (current_step === 2) {
-            // Check if username already exists in the database
-            const username = $('input[name="username"]').val().trim();
-
-            if (username.length < 6) {
-                showWarningMessage('Username must be at least 6 characters long.');
-            } else if (username.length > 20) {
-                showWarningMessage('Username cannot exceed 20 characters.');
-            } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
-                showWarningMessage('Username can only contain letters and numbers.');
-            } else {
-                const formData = new FormData();
-                formData.append('username', username);
-
-                $.ajax({
-                    url: './action/check_username.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        console.log(response);
-                        // Parse JSON response
-                        response = JSON.parse(response);
-                        if (response.hasOwnProperty('exists')) {
-                            if (response.exists) {
-                                showWarningMessage('Username already exists. Please choose a different username.');
-                                $('input[name="username"]').css('border', '1px solid red'); // Add red border to username field
-                            } else {
-                                $('input[name="username"]').css('border', ''); // Remove red border if username doesn't exist
-                                // Check if passwords match
-                                const password = document.querySelector('input[name="password"]').value;
-                                const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
-                                if (password !== confirmPassword) {
-                                    showWarningMessage("Passwords don't match. Please check and try again.");
-                                    document.querySelector('input[name="password"]').style.border = '1px solid red';
-                                    document.querySelector('input[name="confirm_password"]').style.border = '1px solid red'; // Add red border to confirm password field
-                                    return; // Exit the function if passwords don't match
-                                } else {
-                                    document.querySelector('input[name="password"]').style.border = '';
-                                    document.querySelector('input[name="confirm_password"]').style.border = ''; // Remove red border if passwords match
-                                    goToNextStep(); // Proceed to the next step if username doesn't exist and passwords match
-                                }
-                            }
-                        } else {
-                            showWarningMessage('Invalid response received from server.');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        showWarningMessage('Failed to check username. Please try again later.');
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
         } else {
-            // Proceed with other checks if not in the email or username step
+            // Proceed with other checks if not in the email or password step
             goToNextStep(); // Proceed to the next step directly
         }
     } else {
         // If any required field is empty, show SweetAlert2 popup
         Swal.fire({
-            icon: 'error',
-            title: '',
+            icon: 'warning',
+            title: 'Oops...',
             text: 'Please fill out all required fields.'
         });
     }
