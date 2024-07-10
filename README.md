@@ -1,2 +1,5 @@
 # iclinic
 PRMSU Candelaria Clinic Management System
+
+## Todo
+registration
