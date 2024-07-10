@@ -5,3 +5,4 @@ PRMSU Candelaria Clinic Management System
 registration
 login
 database
+admin dashboard
