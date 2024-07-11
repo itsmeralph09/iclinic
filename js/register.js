@@ -77,7 +77,51 @@ nextBtn.addEventListener('click', () => {
 
     // Proceed to the next step if all required fields are filled
     if (fieldsAreValid) {
-        if (current_step === 2) {
+        if (current_step === 1) {
+            const classificationSelect = document.getElementById('classification');
+            const selectedClassification = classificationSelect.value;
+            let numberInputName, url;
+            
+            if (selectedClassification === 'student') {
+                numberInputName = 'student_number';
+                url = './action/check_student_number.php';
+            } else if (selectedClassification === 'employee') {
+                numberInputName = 'employee_number';
+                url = './action/check_employee_number.php';
+            }
+
+            const number = $(`input[name="${numberInputName}"]`).val();
+            const formData = new FormData();
+            formData.append(numberInputName, number);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    // Parse JSON response
+                    response = JSON.parse(response);
+                    if (response.hasOwnProperty('exists')) {
+                        if (response.exists) {
+                            showWarningMessage(`${selectedClassification.charAt(0).toUpperCase() + selectedClassification.slice(1)} number already exists. Please use a different number.`);
+                            $(`input[name="${numberInputName}"]`).css('border', '1px solid red'); // Add red border to the number field
+                        } else {
+                            $(`input[name="${numberInputName}"]`).css('border', ''); // Remove red border if number doesn't exist
+                            goToNextStep(); // Proceed to the next step if number doesn't exist
+                        }
+                    } else {
+                        showWarningMessage('Invalid response received from server.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showWarningMessage('Failed to check number. Please try again later.');
+                    console.error(xhr.responseText);
+                }
+            });
+        } else if (current_step === 2) {
             const emailInputName = 'email'; // Only checking the personal email
             const email = $(`input[name="${emailInputName}"]`).val();
             const formData = new FormData();

@@ -55,8 +55,8 @@
                              <label for="first_name">First Name</label>
                            </div>
                            <div class="form-floating mt-2">
-                             <input type="text" class="form-control form-control-user" id="mid_name" name="mid_name" placeholder="">
-                             <label for="mid_name">Middle Name</label>
+                             <input type="text" class="form-control form-control-user" id="middle_name" name="middle_name" placeholder="">
+                             <label for="middle_name">Middle Name</label>
                            </div>
                            <div class="row g-1">
                               <div class="col-lg-9 col-md-9 col-12">
@@ -67,7 +67,7 @@
                               </div>
                               <div class="col-lg-3 col-md-3 col-12">
                                  <div class="form-floating mt-2">
-                                   <select id="ext_name" name="ext_name" class="form-control form-select" placeholder="">
+                                   <select id="suffix_name" name="suffix_name" class="form-control form-select" placeholder="">
                                        <option value="na" selected>N/A</option>
                                        <option value="JR">JR</option>
                                        <option value="SR">SR</option>
@@ -76,7 +76,7 @@
                                        <option value="IV">IV</option>
                                        <option value="V">V</option>
                                     </select>
-                                   <label for="ext_name">Suffix</label>
+                                   <label for="suffix_name">Suffix</label>
                                  </div>
                               </div>
                            </div>
@@ -118,13 +118,30 @@
 
                         <div class="step col-12">
                            <h4>Provide us your University Information:</h4>
-                           <div class="form-floating mt-1 mb-2">
-                              <select name="classification" class="form-control form-select" id="classification" required>
-                                 <option value="" disabled selected>Select classification</option>
-                                 <option value="student">Student</option>
-                                 <option value="employee">Employee</option>
-                              </select>
-                              <label for="classification">Classification</label>
+                           
+                           <div class="row g-2">
+                              <div id="class_selection_div" class="col-12">
+                                 <div class="form-floating mt-2 mb-2">
+                                    <select name="classification" class="form-control form-select" id="classification" required>
+                                       <option value="" disabled selected>Select classification</option>
+                                       <option value="student">Student</option>
+                                       <option value="employee">Employee</option>
+                                    </select>
+                                    <label for="classification">Classification</label>
+                                 </div>
+                              </div>
+                              <div id="employee_number_div" class="col-lg-6 col-md-6 col-12 d-none">
+                                 <div class="form-floating mt-2 mb-2">
+                                    <input type="text" class="form-control form-control-user" id="employee_number" name="employee_number" placeholder="">
+                                    <label for="employee_number">Employee Number</label>
+                                 </div>
+                              </div>
+                              <div id="student_number_div" class="col-lg-6 col-md-6 col-12 d-none">
+                                 <div class="form-floating mt-2 mb-2">
+                                    <input type="text" class="form-control form-control-user" id="student_number" name="student_number" placeholder="">
+                                    <label for="student_number">Student Number</label>
+                                 </div>
+                              </div>
                            </div>
 
                            <div class="row g-2">
@@ -158,9 +175,11 @@
                               </div>
                            </div>
 
+                           <hr class="my-2">
+
                            <div class="row g-1">
                               <div class="col-lg-12 col-md-12 col-12">
-                                 <div class="form-floating mt-2">
+                                 <div class="form-floating">
                                    <input type="text" class="form-control form-control-user" id="emergency_person" name="emergency_person" placeholder="" requireda>
                                    <label for="emergency_person">Emergency Contact Name</label>
                                  </div>
@@ -184,8 +203,8 @@
                                  </div>
                               </div>
                            </div>
-
-                           <div class="mt-2">
+                           <hr class="my-2">
+                           <div class="">
                               <label for="profile" class="mb-2">Upload Your Recent Profile Picture</label>
                               <input class="form-control form-control-file" type="file" name="profile" id="profile" accept="image/png, image/gif, image/jpeg" required>
                            </div>
@@ -303,10 +322,18 @@
 
          // Classification Select Validation
          document.addEventListener("DOMContentLoaded", function() {
+             var classificationSelectDiv = document.getElementById("class_selection_div");
              var classificationSelect = document.getElementById("classification");
+
+             var employeeNoDiv = document.getElementById("employee_number_div");
+             var studentNoDiv = document.getElementById("student_number_div");
+
+             var employeeNoInput = document.getElementById("employee_number");
+             var studentNoInput = document.getElementById("student_number");
 
              var courseSelectDiv = document.getElementById("course_selection");
              var courseSelect = document.getElementById("course");
+
              var yearSelectDiv = document.getElementById("year_selection");
              var yearSelect = document.getElementById("year_level");
 
@@ -315,35 +342,63 @@
 
              classificationSelect.addEventListener("change", function() {
                  if (classificationSelect.value === "student") {
+                     // show student number field
+                     classificationSelectDiv.classList.add('col-lg-6', 'col-md-6');
+                     studentNoDiv.classList.remove('d-none');
+                     studentNoInput.setAttribute('required', '');
+
                      // show course and year fields
                      courseSelectDiv.classList.remove('d-none');
                      courseSelect.setAttribute('required', '');
                      yearSelectDiv.classList.remove('d-none');
                      yearSelect.setAttribute('required', '');
+
+                     // hide employee number field
+                     employeeNoDiv.classList.add('d-none');
+                     employeeNoInput.removeAttribute('required');
+
                      // hide occupation field
                      occupationDiv.classList.add('d-none');
                      occupationDiv.removeAttribute('required');
+
                      // focus to course selection
-                     courseSelect.focus();
+                     studentNoInput.focus();
+
                      // remove borders
                      courseSelect.style.border = '';
                      yearSelect.style.border = '';
                      occupationInput.style.border = '';
+                     studentNoInput.style.border = '';
+                     employeeNoInput.style.border = '';
                  } else if (classificationSelect.value === "employee") {
+                     // show employee number field
+                     classificationSelectDiv.classList.add('col-lg-6', 'col-md-6');
+                     employeeNoDiv.classList.remove('d-none');
+                     employeeNoInput.setAttribute('required', '');
+
                      // hide course and year fields
                      courseSelectDiv.classList.add('d-none');
                      courseSelect.removeAttribute('required');
                      yearSelectDiv.classList.add('d-none');
                      yearSelect.removeAttribute('required');
+
+                     // hide student number field
+                     studentNoDiv.classList.add('d-none');
+                     studentNoInput.removeAttribute('required');
+
                      // show occupation field
                      occupationDiv.classList.remove('d-none');
                      occupationInput.setAttribute('required', '');
+
                      // focus to occupation input
-                     occupationInput.focus();
+                     employeeNoInput.focus();
+
                      // remove borders
                      courseSelect.style.border = '';
                      yearSelect.style.border = '';
                      occupationInput.style.border = '';
+                     studentNoInput.style.border = '';
+                     employeeNoInput.style.border = '';
                  }
              });
          });
