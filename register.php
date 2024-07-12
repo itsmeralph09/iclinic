@@ -51,7 +51,7 @@
                         <div class="step col-12">
                            <h4>Provide us your Personal Information:</h4>
                            <div class="form-floating mt-1">
-                             <input type="text" class="form-control form-control-user" id="first_name" name="first_name" placeholder="" requireda>
+                             <input type="text" class="form-control form-control-user" id="first_name" name="first_name" placeholder="" required>
                              <label for="first_name">First Name</label>
                            </div>
                            <div class="form-floating mt-2">
@@ -61,7 +61,7 @@
                            <div class="row g-1">
                               <div class="col-lg-9 col-md-9 col-12">
                                  <div class="form-floating mt-2">
-                                   <input type="text" class="form-control form-control-user" id="last_name" name="last_name" placeholder="" requireda>
+                                   <input type="text" class="form-control form-control-user" id="last_name" name="last_name" placeholder="" required>
                                    <label for="last_name">Last Name</label>
                                  </div>
                               </div>
@@ -83,16 +83,16 @@
                            <div class="row g-1">
                               <div class="col-lg-7 col-md-7 col-12">
                                  <div class="form-floating mt-2">
-                                   <input class="form-control" id="birth_date" name="birth_date" type="date" requireda>
+                                   <input class="form-control" id="birth_date" name="birth_date" type="date" required>
                                    <label for="birth_date">Birthdate</label>
                                  </div>
                               </div>
                               <div class="col-lg-5 col-md-5 col-12">
                                  <div class="form-floating mt-2">
-                                   <select name="sex" class="form-control form-select" id="sex" requireda>
+                                   <select name="sex" class="form-control form-select" id="sex" required>
                                        <option value="" disabled selected>Select sex</option>
-                                       <option value="Male">Male</option>
-                                       <option value="Female">Female</option>
+                                       <option value="male">Male</option>
+                                       <option value="female">Female</option>
                                     </select>
                                    <label for="sex">Sex</label>
                                  </div>
@@ -101,7 +101,7 @@
                            <div class="row g-2">
                               <div class="col-lg-12 col-md-12 col-12">
                                  <div class="form-floating mt-2">
-                                   <input type="number" class="form-control form-control-user" id="contact" name="contact" placeholder="" requireda>
+                                   <input type="number" class="form-control form-control-user" id="contact" name="contact" placeholder="" required>
                                    <label for="contact">Contact No. (11 digits)</label>
                                  </div>
                               </div>
@@ -109,7 +109,7 @@
                            <div class="row g-1">
                               <div class="col-lg-12 col-md-12 col-12">
                                  <div class="form-floating mt-2">
-                                   <input type="text" class="form-control form-control-user" id="address" name="addresss" placeholder="" requireda>
+                                   <input type="text" class="form-control form-control-user" id="address" name="address" placeholder="" required>
                                    <label for="address">Address</label>
                                  </div>
                               </div>
@@ -180,7 +180,7 @@
                            <div class="row g-1">
                               <div class="col-lg-12 col-md-12 col-12">
                                  <div class="form-floating">
-                                   <input type="text" class="form-control form-control-user" id="emergency_person" name="emergency_person" placeholder="" requireda>
+                                   <input type="text" class="form-control form-control-user" id="emergency_person" name="emergency_person" placeholder="" required>
                                    <label for="emergency_person">Emergency Contact Name</label>
                                  </div>
                               </div>
@@ -189,7 +189,7 @@
                            <div class="row g-1">
                               <div class="col-lg-12 col-md-12 col-12">
                                  <div class="form-floating mt-2">
-                                   <input type="number" class="form-control form-control-user" id="emergency_contact" name="emergency_contact" placeholder="" requireda>
+                                   <input type="number" class="form-control form-control-user" id="emergency_contact" name="emergency_contact" placeholder="" required>
                                    <label for="emergency_contact">Emergency Contact No. (11 digits)</label>
                                  </div>
                               </div>
@@ -198,7 +198,7 @@
                            <div class="row g-1">
                               <div class="col-lg-12 col-md-12 col-12">
                                  <div class="form-floating mt-2">
-                                   <input type="text" class="form-control form-control-user" id="emergency_address" name="emergency_address" placeholder="" requireda>
+                                   <input type="text" class="form-control form-control-user" id="emergency_address" name="emergency_address" placeholder="" required>
                                    <label for="emergency_address">Emergency Contact Address (street, etc)</label>
                                  </div>
                               </div>
@@ -359,7 +359,7 @@
 
                      // hide occupation field
                      occupationDiv.classList.add('d-none');
-                     occupationDiv.removeAttribute('required');
+                     occupationInput.removeAttribute('required');
 
                      // focus to course selection
                      studentNoInput.focus();
