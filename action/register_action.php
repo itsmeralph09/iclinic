@@ -9,12 +9,39 @@
         $middle_name = strtoupper(mysqli_real_escape_string($con, $_POST['middle_name']));
         $last_name = strtoupper(mysqli_real_escape_string($con, $_POST['last_name']));
         $suffix_name = strtoupper(mysqli_real_escape_string($con, $_POST['suffix_name']));
-        $birth_date = mysqli_real_escape_string($con, $_POST['birth_date']);
+        $birth_date = mysqli_real_escape_string($con, $_POST['birth_date']); 
+
+        // Debug: Check the format of the input birth date
+        error_log("Received birth date: " . $birth_date);
+
+        // Initialize age variable
+        $age = 0;
 
         // Calculate age
-        $birthDate = new DateTime($birth_date);
-        $currentDate = new DateTime();
-        $age = $birthDate->diff($currentDate)->y;
+        try {
+            // Create DateTime object from the birth date
+            $birthDate = DateTime::createFromFormat('Y-m-d', $birth_date);
+
+            if (!$birthDate || $birthDate->format('Y-m-d') !== $birth_date) {
+                throw new Exception("Date format incorrect");
+            }
+
+            // Get the current date
+            $currentDate = new DateTime();
+
+            // Ensure birth date is not in the future
+            if ($birthDate > $currentDate) {
+                throw new Exception("Birth date is in the future.");
+            }
+
+            // Calculate the age
+            $age = $birthDate->diff($currentDate)->y;
+
+            // Debug: Check the calculated age
+            error_log("Calculated age: " . $age);
+        } catch (Exception $e) {
+            error_log("Error parsing date: " . $e->getMessage());
+        }
 
         $sex = strtoupper(mysqli_real_escape_string($con, $_POST['sex']));
         $contact = mysqli_real_escape_string($con, $_POST['contact']);
@@ -23,11 +50,11 @@
 
         if ($classification == "STUDENT") {
             $student_number = mysqli_real_escape_string($con, $_POST['student_number']);
-            $course = mysqli_real_escape_string($con, $_POST['course']);
+            $course = strtoupper(mysqli_real_escape_string($con, $_POST['course']));
             $year_level = mysqli_real_escape_string($con, $_POST['year_level']);
         } elseif ($classification == "EMPLOYEE") {
             $employee_number = mysqli_real_escape_string($con, $_POST['employee_number']);
-            $occupation = mysqli_real_escape_string($con, $_POST['occupation']);
+            $occupation = strtoupper(mysqli_real_escape_string($con, $_POST['occupation']));
         }
 
         $emergency_person = strtoupper(mysqli_real_escape_string($con, $_POST['emergency_person']));
@@ -63,7 +90,7 @@
 
                     if ($con->query($sqlSaveStudent) === TRUE) {
                         // Return success response
-                        echo json_encode(array("status" => "success", "message" => "Registration successful."));
+                        echo json_encode(array("status" => "success", "message" => "Registration successful." .$age));
                     } else {
                         // Return error response if student insertion fails
                         echo json_encode(array("status" => "error", "message" => "Failed to save student details."));
