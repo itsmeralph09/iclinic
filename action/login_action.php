@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              INNER JOIN 
                 student_tbl st ON ut.user_id = st.user_id
              WHERE 
-                ut.no = '20-00238'
+                ut.no = '$no'
                 AND ut.role = 'STUDENT')
             UNION
             (SELECT 
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              INNER JOIN 
                 employee_tbl et ON ut.user_id = et.user_id
              WHERE 
-                ut.no = '20-00238'
+                ut.no = '$no'
                 AND ut.role = 'EMPLOYEE')
             UNION
             (SELECT 
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              INNER JOIN 
                 admin_tbl at ON ut.user_id = at.user_id
              WHERE 
-                ut.no = '20-00238'
+                ut.no = '$no'
                 AND ut.role = 'ADMIN');
             ";
 
