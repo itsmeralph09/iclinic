@@ -18,7 +18,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = isset($_POST['password']) ? sanitizeInput($_POST['password']) : '';
 
     // Construct the SQL query
-    $sql = "SELECT * FROM user_tbl WHERE no = '$no'";
+    $sql = "(SELECT 
+                ut.user_id, ut.role, ut.no, ut.password,
+                CONCAT(st.first_name, ' ', st.last_name) AS fullname, st.profile
+             FROM 
+                user_tbl ut
+             INNER JOIN 
+                student_tbl st ON ut.user_id = st.user_id
+             WHERE 
+                ut.no = '$no'
+                AND ut.role = 'STUDENT')
+            UNION
+            (SELECT 
+                ut.user_id, ut.role, ut.no, ut.password,
+                CONCAT(et.first_name, ' ', et.last_name) AS fullname, et.profile
+             FROM 
+                user_tbl ut
+             INNER JOIN 
+                employee_tbl et ON ut.user_id = et.user_id
+             WHERE 
+                ut.no = '$no'
+                AND ut.role = 'EMPLOYEE');";
 
     // Execute the SQL statement
     $result = $con->query($sql);
@@ -31,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Set session variables
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['role'] = $row['role'];
-            // $_SESSION['full_name'] = $row['first_name'] . ' ' . $row['last_name'];
-            // $_SESSION['profile_pic'] = $row['profile'];
+            $_SESSION['fullname'] = $row['fullname'];
+            $_SESSION['profile'] = $row['profile'];
 
             // Return role value as part of the response
             echo json_encode(['success' => true, 'role' => $row['role']]);
