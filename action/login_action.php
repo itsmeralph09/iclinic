@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              INNER JOIN 
                 student_tbl st ON ut.user_id = st.user_id
              WHERE 
-                ut.no = '$no'
+                ut.no = '20-00238'
                 AND ut.role = 'STUDENT')
             UNION
             (SELECT 
@@ -37,8 +37,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              INNER JOIN 
                 employee_tbl et ON ut.user_id = et.user_id
              WHERE 
-                ut.no = '$no'
-                AND ut.role = 'EMPLOYEE');";
+                ut.no = '20-00238'
+                AND ut.role = 'EMPLOYEE')
+            UNION
+            (SELECT 
+                ut.user_id, ut.role, ut.no, ut.password,
+                CONCAT(at.first_name, ' ', at.last_name) AS fullname, at.profile
+             FROM 
+                user_tbl ut
+             INNER JOIN 
+                admin_tbl at ON ut.user_id = at.user_id
+             WHERE 
+                ut.no = '20-00238'
+                AND ut.role = 'ADMIN');
+            ";
 
     // Execute the SQL statement
     $result = $con->query($sql);

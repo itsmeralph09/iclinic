@@ -1,3 +1,8 @@
+<?php
+require_once "function/check_session.php";
+// Check if user_id and role sessions are already set
+redirectToDashboard();
+?>
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -28,6 +33,7 @@
 
    </head>
    <body class="">
+      <?php displaySessionErrorMessage(); ?>
       <!-- CONTAINER -->
       <div class="container d-flex align-items-center min-vh-100">
          <div class="row g-0 justify-content-center">
@@ -54,7 +60,7 @@
                               </div>
                               <div class="form-floating mt-3">
                                 <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="" required>
-                                <label for="first_name">Password</label>
+                                <label for="password">Password</label>
                               </div>
                            </div>
                         </div>
