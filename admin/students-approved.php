@@ -128,23 +128,17 @@
                                            
                                             <td class="text-center">
                                                 <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
-                                                <a href="#" class="btn btn-sm btn-success approve-student-btn"
-                                                   data-user-id="<?php echo $user_id; ?>"
-                                                   data-user-name="<?php echo htmlspecialchars($full_name); ?>"
-                                                   data-user-course="<?php echo htmlspecialchars($course); ?>">
-                                                   <i class="fa-solid fa-check"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-sm btn-danger decline-student-btn"
+                                                <a href="#" class="btn btn-sm btn-danger delete-student-btn"
                                                    data-user-id="<?php echo $user_id; ?>" 
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-course="<?php echo htmlspecialchars($course); ?>">
-                                                   <i class="fa-solid fa-xmark"></i>
+                                                   <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                         <?php
                                             $counter++;
-                                            // include('modal/student_view_edit_modal.php');
+                                            include('modal/student_view_edit_modal.php');
                                         } 
                                         ?>
                                         </tbody>
@@ -195,26 +189,26 @@
     <script>
         $(document).ready(function() {
             // Function for deleting event
-            $('.decline-student-btn').on('click', function(e) {
+            $('.delete-student-btn').on('click', function(e) {
                 e.preventDefault();
                 var declineButton = $(this);
                 var userId = declineButton.data('user-id');
                 var userName = decodeURIComponent(declineButton.data('user-name'));
                 var userCourse = decodeURIComponent(declineButton.data('user-course'));
                 Swal.fire({
-                    title: 'Decline Student Account Registration',
-                    html: "You are about to decline the following student:<br><br>" +
+                    title: 'Delete Student Account',
+                    html: "You are about to delete the following student:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
                           "<strong>Course:</strong> " + userCourse + "<br>",
-                    icon: 'question',
+                    icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, decline!'
+                    confirmButtonText: 'Yes, delete!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'action/decline_student.php', // Corrected 'file' to 'url'
+                            url: 'action/delete_student.php', // Corrected 'file' to 'url'
                             type: 'POST',
                             data: {
                                 user_id: userId
@@ -222,8 +216,8 @@
                             success: function(response) {
                                 if (response.trim() === 'success') {
                                     Swal.fire(
-                                        'Declined!',
-                                        'Student has been declined.',
+                                        'Deleted!',
+                                        'Student has been deleted.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -231,7 +225,7 @@
                                 } else {
                                     Swal.fire(
                                         'Error!',
-                                        'Failed to decline student.',
+                                        'Failed to delete student.',
                                         'error'
                                     );
                                 }
@@ -240,67 +234,7 @@
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
-                                    'Failed to decline student.',
-                                    'error'
-                                );
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-
-    <!-- Approve Students Account Registration -->
-    <script>
-        $(document).ready(function() {
-            // Function for deleting event
-            $('.approve-student-btn').on('click', function(e) {
-                e.preventDefault();
-                var approveButton = $(this);
-                var userId = approveButton.data('user-id');
-                var userName = decodeURIComponent(approveButton.data('user-name'));
-                var userCourse = decodeURIComponent(approveButton.data('user-course'));
-                Swal.fire({
-                    title: 'Approve Student Account Registration',
-                    html: "You are about to approve the following student:<br><br>" +
-                          "<strong>Name:</strong> " + userName + "<br>" +
-                          "<strong>Course:</strong> " + userCourse + "<br>",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#1cc88a',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, approve!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'action/approve_student.php', // Corrected 'file' to 'url'
-                            type: 'POST',
-                            data: {
-                                user_id: userId
-                            },
-                            success: function(response) {
-                                if (response.trim() === 'success') {
-                                    Swal.fire(
-                                        'Approved!',
-                                        'Student has been approved.',
-                                        'success'
-                                    ).then(() => {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire(
-                                        'Error!',
-                                        'Failed to approve student.',
-                                        'error'
-                                    );
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(xhr.responseText);
-                                Swal.fire(
-                                    'Error!',
-                                    'Failed to approve student.',
+                                    'Failed to delete student.',
                                     'error'
                                 );
                             }
