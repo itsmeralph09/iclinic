@@ -40,6 +40,26 @@ checkSession();
         .input-error {
             border: 1px solid red !important;
         }
+        .custom-readonly-input {
+            font-style: italic;
+            border: none;
+            border-bottom: 1.2px dashed #303991;
+            border-radius: 0;
+            background-color: transparent;
+            padding-left: 0;
+        }
+
+        .custom-readonly-input:focus {
+            font-weight: bold;
+            font-style: italic;
+            outline: none;
+            box-shadow: none;
+            border: none;
+            border-bottom: 1.2px solid #303991;
+            border-radius: 0;
+            background-color: transparent;
+            padding-left: 0;
+        }
     </style>
 
 </head>

@@ -83,6 +83,12 @@
                                                     }
 
                                                     $birthdate = $row['birthdate'];
+                                                    // Create a DateTime object from the birthdate
+                                                    $birthdate_object = new DateTime($birthdate);
+
+                                                    // Format the date to "M j, Y" (e.g., "Sep 9, 2001")
+                                                    $formatted_birthdate = $birthdate_object->format('M j, Y');
+
                                                     $age = $row['age'];
                                                     $sex = $row['sex'];
                                                     $email = $row['email'];
@@ -144,7 +150,7 @@
                                         </tr>
                                         <?php
                                             $counter++;
-                                            // include('modal/student_view_edit_modal.php');
+                                            include('modal/student_view_edit_modal.php');
                                         } 
                                         ?>
                                         </tbody>
