@@ -36,12 +36,8 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">List of Pending Students</h6>
-                     
-                        <!-- <a class="btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#addnew"><i class="fas fa-plus fa-sm text-white-50"></i> Add New</a> -->
-                   
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -51,10 +47,11 @@
                                     <tr>
                                       
                                         <th scope="col">#</th>                                        
-                                        <th scope="col">Profile Picture</th>                                        
+                                        <th scope="col">Profile</th>                                        
                                         <th scope="col">Name</th>                                               
                                         <th scope="col">Course & Year</th>                                             
-                                        <th scope="col">Email</th>                                               
+                                        <th scope="col">Contact Info</th>                                           
+                                        <th scope="col">Account Status</th>                                           
                                         <th scope="col">Action</th>                             
                                        
                                     </tr>
@@ -65,7 +62,7 @@
                                 <?php
 
                                     require '../db/dbconn.php';
-                                    $display_users = "SELECT *
+                                    $display_users = "SELECT st.*, ut.user_id, ut.email, ut.role, ut.status
                                                         FROM student_tbl st
                                                         INNER JOIN user_tbl ut ON ut.user_id = st.user_id
                                                         WHERE ut.status = 'PENDING' AND ut.deleted = 0
@@ -79,18 +76,22 @@
                                         $first_name = $row['first_name'];
                                         $mid_name = $row['middle_name'];
                                         $last_name = $row['last_name'];
+
                                         $suffix_name = $row['suffix_name'];
                                         if ($suffix_name == 'NA') {
                                             $suffix = '';
                                         }else{
                                             $suffix = ', '.$suffix_name;
                                         }
+
+                                        $birthdate = $row['birthdate'];
                                         $age = $row['age'];
                                         $sex = $row['sex'];
                                         $email = $row['email'];
-                                        $contact = $row['contact'];
+                                        $contact = $row['contact_no'];
                                         $address = $row['personal_address'];
                                         $course = $row['course'];
+
                                         $yr = $row['year_level'];
                                         if ($yr == 1) {
                                             $year = "1st Year";
@@ -102,7 +103,18 @@
                                             $year = "4th Year";
                                         }
                                         $emergency_person = $row['emergency_contact_name'];
+                                        $emergency_no = $row['emergency_contact_no'];
+                                        $emergency_address = $row['emergency_contact_address'];
+
                                         $profile = $row['profile'];
+                                        $role = $row['role'];
+
+                                        $status = $row['status'];
+                                        if ($status == 'PENDING') {
+                                            $status_text = "<p class='badge-warning text-center rounded-pill'>PENDING</p>";
+                                        } else {
+                                            $status_text = "<p class='badge-success text-center rounded-pill'>APPROVED</p>";
+                                        }
                                        
                                         $full_name = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] . '' . $suffix;
                                 ?>
@@ -113,25 +125,28 @@
                                 </td>
                                 <td class=""><?php echo $full_name; ?></td>
                                 <td class=""><?php echo $course; ?> - <?php echo $year; ?></td>
-                                <td class=""><?php echo $email; ?></td>
+                                <td class=""><?php echo $contact; ?></td>
+                                <td class=""><?php echo $status_text; ?></td>
                                
                                 <td class="text-center">
                                     <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
                                     <a href="#" class="btn btn-sm btn-success approve-student-btn"
                                        data-user-id="<?php echo $user_id; ?>"
-                                       data-user-name="<?php echo htmlspecialchars($full_names); ?>">
+                                       data-user-name="<?php echo htmlspecialchars($full_name); ?>"
+                                       data-user-course="<?php echo htmlspecialchars($course); ?>">
                                        <i class="fa-solid fa-check"></i>
                                     </a>
                                     <a href="#" class="btn btn-sm btn-danger decline-student-btn"
                                        data-user-id="<?php echo $user_id; ?>" 
-                                       data-user-name="<?php echo htmlspecialchars($full_names); ?>">
+                                       data-user-name="<?php echo htmlspecialchars($full_name); ?>"
+                                       data-user-course="<?php echo htmlspecialchars($course); ?>">
                                        <i class="fa-solid fa-xmark"></i>
                                     </a>
                                 </td>
                             </tr>
                             <?php
                                 $counter++;
-                                // include('modal/user_edit_modal.php');
+                                // include('modal/student_view_edit_modal.php');
                             } 
                             ?>
                             </tbody>
@@ -141,7 +156,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <?php include('modal/user_add_modal.php'); ?>   -->
         </div>
 
                 </div>
@@ -176,57 +190,33 @@
         $('#myTable').DataTable({
             scrollX: true
         })
-
-        // Input Element for Contact Number
-         function limitContactInputLength(event) {
-             // Remove non-digit characters
-             var inputValue = event.target.value.replace(/\D/g, '');
-
-             // Limit the length to 11 digits
-             if (inputValue.length > 11) {
-                 inputValue = inputValue.slice(0, 11);
-             }
-
-             // Update the input value
-             event.target.value = inputValue;
-         }
-
-         // Contact Input Validation
-         var contactInput = document.getElementById('contactInput');
-         contactInput.addEventListener('input', limitContactInputLength);
-
-
-         // Select all inputs with the class 'contact-input'
-        const contactInputs = document.querySelectorAll('.contact-input');
-
-        // Add event listener to each contact input
-        contactInputs.forEach((input) => {
-            input.addEventListener('input', limitContactInputLength);
-        });
     });
 </script>
 
-<!-- <script>
+<!-- Decline Students Account Registration -->
+<script>
     $(document).ready(function() {
         // Function for deleting event
-        $('.delete-user-btn').on('click', function(e) {
+        $('.decline-student-btn').on('click', function(e) {
             e.preventDefault();
-            var deleteBtn = $(this);
-            var userId = deleteBtn.data('user-id');
-            var userName = decodeURIComponent(deleteBtn.data('user-name'));
+            var declineButton = $(this);
+            var userId = declineButton.data('user-id');
+            var userName = decodeURIComponent(declineButton.data('user-name'));
+            var userCourse = decodeURIComponent(declineButton.data('user-course'));
             Swal.fire({
-                title: 'Delete User',
-                html: "You are about to delete the following user:<br><br>" +
-                      "<strong>Name:</strong> " + userName + "<br>",
+                title: 'Decline Student Account Registration',
+                html: "You are about to decline the following student:<br><br>" +
+                      "<strong>Name:</strong> " + userName + "<br>" +
+                      "<strong>Course:</strong> " + userCourse + "<br>",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, decline!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'action/delete_user.php', // Corrected 'file' to 'url'
+                        url: 'action/decline_student.php', // Corrected 'file' to 'url'
                         type: 'POST',
                         data: {
                             user_id: userId
@@ -234,8 +224,8 @@
                         success: function(response) {
                             if (response.trim() === 'success') {
                                 Swal.fire(
-                                    'Deleted!',
-                                    'User has been deleted.',
+                                    'Declined!',
+                                    'Student has been declined.',
                                     'success'
                                 ).then(() => {
                                     location.reload();
@@ -243,7 +233,7 @@
                             } else {
                                 Swal.fire(
                                     'Error!',
-                                    'Failed to delete user.',
+                                    'Failed to decline student.',
                                     'error'
                                 );
                             }
@@ -252,7 +242,7 @@
                             console.error(xhr.responseText);
                             Swal.fire(
                                 'Error!',
-                                'Failed to delete user.',
+                                'Failed to decline student.',
                                 'error'
                             );
                         }
@@ -262,7 +252,7 @@
         });
     });
 </script>
- -->
+
 <!-- <script>
     $(document).ready(function() {
         // Variable to track if the profile picture is changed
