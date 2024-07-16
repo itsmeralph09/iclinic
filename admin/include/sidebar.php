@@ -41,7 +41,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Students</h6>
                         <a class="collapse-item" href="students-pending.php">Pending</a>
-                        <a class="collapse-item" href="">Approved</a>
+                        <a class="collapse-item" href="students-approved.php">Approved</a>
                     </div>
                 </div>
             </li>
