@@ -184,426 +184,486 @@
 
     <?php include './include/script.php'; ?>
 
-<script>
-    $(document).ready(function(){
-        //inialize datatable
-        $('#myTable').DataTable({
-            scrollX: true
-        })
-    });
-</script>
+    <script>
+        $(document).ready(function(){
+            //inialize datatable
+            $('#myTable').DataTable({
+                scrollX: true
+            })
+        });
+    </script>
 
-<!-- Decline Students Account Registration -->
-<script>
-    $(document).ready(function() {
-        // Function for deleting event
-        $('.decline-student-btn').on('click', function(e) {
-            e.preventDefault();
-            var declineButton = $(this);
-            var userId = declineButton.data('user-id');
-            var userName = decodeURIComponent(declineButton.data('user-name'));
-            var userCourse = decodeURIComponent(declineButton.data('user-course'));
-            Swal.fire({
-                title: 'Decline Student Account Registration',
-                html: "You are about to decline the following student:<br><br>" +
-                      "<strong>Name:</strong> " + userName + "<br>" +
-                      "<strong>Course:</strong> " + userCourse + "<br>",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, decline!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'action/decline_student.php', // Corrected 'file' to 'url'
-                        type: 'POST',
-                        data: {
-                            user_id: userId
-                        },
-                        success: function(response) {
-                            if (response.trim() === 'success') {
-                                Swal.fire(
-                                    'Declined!',
-                                    'Student has been declined.',
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            } else {
+    <!-- Decline Students Account Registration -->
+    <script>
+        $(document).ready(function() {
+            // Function for deleting event
+            $('.decline-student-btn').on('click', function(e) {
+                e.preventDefault();
+                var declineButton = $(this);
+                var userId = declineButton.data('user-id');
+                var userName = decodeURIComponent(declineButton.data('user-name'));
+                var userCourse = decodeURIComponent(declineButton.data('user-course'));
+                Swal.fire({
+                    title: 'Decline Student Account Registration',
+                    html: "You are about to decline the following student:<br><br>" +
+                          "<strong>Name:</strong> " + userName + "<br>" +
+                          "<strong>Course:</strong> " + userCourse + "<br>",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, decline!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'action/decline_student.php', // Corrected 'file' to 'url'
+                            type: 'POST',
+                            data: {
+                                user_id: userId
+                            },
+                            success: function(response) {
+                                if (response.trim() === 'success') {
+                                    Swal.fire(
+                                        'Declined!',
+                                        'Student has been declined.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to decline student.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
                                     'Failed to decline student.',
                                     'error'
                                 );
                             }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Approve Students Account Registration -->
+    <script>
+        $(document).ready(function() {
+            // Function for deleting event
+            $('.approve-student-btn').on('click', function(e) {
+                e.preventDefault();
+                var approveButton = $(this);
+                var userId = approveButton.data('user-id');
+                var userName = decodeURIComponent(approveButton.data('user-name'));
+                var userCourse = decodeURIComponent(approveButton.data('user-course'));
+                Swal.fire({
+                    title: 'Approve Student Account Registration',
+                    html: "You are about to approve the following student:<br><br>" +
+                          "<strong>Name:</strong> " + userName + "<br>" +
+                          "<strong>Course:</strong> " + userCourse + "<br>",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#1cc88a',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, approve!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'action/approve_student.php', // Corrected 'file' to 'url'
+                            type: 'POST',
+                            data: {
+                                user_id: userId
+                            },
+                            success: function(response) {
+                                if (response.trim() === 'success') {
+                                    Swal.fire(
+                                        'Approved!',
+                                        'Student has been approved.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to approve student.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to approve student.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- <script>
+        $(document).ready(function() {
+            // Variable to track if the profile picture is changed
+            let profileValid = false;
+
+            // Function to show SweetAlert2 warning message
+            const showWarningMessage = (message) => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: message
+                });
+            };
+
+            // Function to check if email or username exists
+            const checkExistingUser = (formData) => {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: 'action/check_user_exist.php', // URL to check the database
+                        type: 'POST',
+                        data: formData, // Serialize form data
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.exists) {
+                                // Highlight the corresponding input fields with red border
+                                if (response.exists.username && response.exists.email) {
+                                    showWarningMessage('Email and Username already exist.');
+                                    $('input[name="username"]').addClass('input-error');
+                                    $('input[name="email"]').addClass('input-error');
+                                } else if (response.exists.email) {
+                                    showWarningMessage('Email already exists.');
+                                    $('input[name="email"]').addClass('input-error');
+                                } else if (response.exists.username) {
+                                    showWarningMessage('Username already exists.');
+                                    $('input[name="username"]').addClass('input-error');
+                                }
+                                reject(); // Reject the promise if user already exists
+                            } else {
+                                resolve(); // Resolve the promise if user doesn't exist
+                            }
                         },
                         error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            Swal.fire(
-                                'Error!',
-                                'Failed to decline student.',
-                                'error'
-                            );
+                            console.error(xhr.responseText); // Output error response to console (for debugging)
+                            reject(); // Reject the promise if there's an error
                         }
+                    });
+                });
+            };
+
+            $('#profileUpload').on('change', function() {
+                const fileInput = $(this)[0];
+                const file = fileInput.files[0];
+
+                // Update the label text with the selected file name
+                $(this).next('#profileLabel').text(file.name);
+
+                // Set profileValid to true when a new profile picture is selected
+                profileValid = true;
+
+                // Check if the file type is allowed
+                const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+                if (allowedTypes.includes(file.type)) {
+                    // Read the selected file and display the preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#profilePreview').attr('src', e.target.result); // Set image source to preview element
+                        $('input[name="profile"]').removeClass('input-error');
+                        $('.custom-file-label[for="profileUpload"]').removeClass('input-error'); // Remove input-error class from the label as well
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Show warning message for invalid file type
+                    showWarningMessage('Please select a valid image file (PNG, JPG, WEBP).');
+                    profileValid = false;
+                    $('#profileUpload').val(''); // Clear the file input
+                    $('input[name="profile"]').addClass('input-error');
+                    $('.custom-file-label[for="profileUpload"]').addClass('input-error'); // Add input-error class to the label as well
+                }
+            });
+
+            // Function to handle form submission
+            $('#addUser').on('click', function(e) {
+                e.preventDefault(); // Prevent default form submission
+
+                var formData = new FormData($('#addForm')[0]); // Create FormData object
+
+                const requiredFields = $('#addForm').find('[required], select[required]');
+
+                let fieldsAreValid = true; // Initialize as true
+
+                // Remove existing error classes
+                $('.form-control').removeClass('input-error');
+
+                requiredFields.each(function() {
+                    // Check if the element is a select and it doesn't have a selected value
+                    if ($(this).is('select') && $(this).val() === null) {
+                        fieldsAreValid = false; // Set to false if any required select field doesn't have a value
+                        showWarningMessage('Please fill-up the required fields.');
+                        $(this).addClass('input-error'); // Add red border to missing field
+                    } else if ($(this).val().trim() === '') {
+                        fieldsAreValid = false; // Set to false if any required field is empty
+                        showWarningMessage('Please fill-up the required fields.');
+                        $(this).addClass('input-error'); // Add red border to missing field
+                    } else {
+                        $(this).removeClass('input-error'); // Remove red border if field is filled
+                    }
+                });
+
+                let passwordsAreValid = true; // Initialize as true
+                const password = formData.get('password');
+                const confirmPassword = formData.get('confirm_password');
+
+                if (fieldsAreValid) {
+                    if (password !== confirmPassword) {
+                        passwordsAreValid = false;
+                        showWarningMessage("Passwords don't match. Please check and try again.");
+                        $('input[name="password"]').addClass('is-invalid');
+                        $('input[name="confirm_password"]').addClass('is-invalid'); // Add red border to confirm password field
+                    } else {
+                        $('input[name="password"]').removeClass('is-invalid');
+                        $('input[name="confirm_password"]').removeClass('is-invalid'); // Remove red border if passwords match
+                    }
+                }
+
+                if (fieldsAreValid && passwordsAreValid) {
+                    if (!profileValid) {
+                        showWarningMessage('Please upload a valid profile picture.');
+                        $('#profileUpload').addClass('input-error');
+                        $('#profileLabel').addClass('input-error'); // Add input-error class to the label as well
+                        return; // Stop form submission
+                    }
+
+                    checkExistingUser(formData).then(() => {
+                        $.ajax({
+                            url: 'action/add_user.php',
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                // Handle success response
+                                if (response.trim() === 'success') {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'User added successfully',
+                                        showConfirmButton: true,
+                                        confirmButtonText: 'OK'
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    // Show error message if response is not 'success'
+                                    showWarningMessage('Failed to add user. Please try again later.');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error response
+                                console.error(xhr.responseText);
+                                showWarningMessage('Failed to add user. Please try again later.');
+                            }
+                        });
+                    }).catch(() => {
+                        // If user exists, do nothing (error message already shown)
                     });
                 }
             });
         });
-    });
-</script>
+    </script> -->
 
-<!-- <script>
-    $(document).ready(function() {
-        // Variable to track if the profile picture is changed
-        let profileValid = false;
+    <!-- <script>
+        $(document).ready(function() {
+            // Variable to track if the profile picture is changed
+            let profileValid = true;
 
-        // Function to show SweetAlert2 warning message
-        const showWarningMessage = (message) => {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: message
-            });
-        };
-
-        // Function to check if email or username exists
-        const checkExistingUser = (formData) => {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: 'action/check_user_exist.php', // URL to check the database
-                    type: 'POST',
-                    data: formData, // Serialize form data
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        if (response.exists) {
-                            // Highlight the corresponding input fields with red border
-                            if (response.exists.username && response.exists.email) {
-                                showWarningMessage('Email and Username already exist.');
-                                $('input[name="username"]').addClass('input-error');
-                                $('input[name="email"]').addClass('input-error');
-                            } else if (response.exists.email) {
-                                showWarningMessage('Email already exists.');
-                                $('input[name="email"]').addClass('input-error');
-                            } else if (response.exists.username) {
-                                showWarningMessage('Username already exists.');
-                                $('input[name="username"]').addClass('input-error');
-                            }
-                            reject(); // Reject the promise if user already exists
-                        } else {
-                            resolve(); // Resolve the promise if user doesn't exist
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText); // Output error response to console (for debugging)
-                        reject(); // Reject the promise if there's an error
-                    }
+            // Function to show SweetAlert2 warning message
+            const showWarningMessage = (message) => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: message
                 });
-            });
-        };
+            };
 
-        $('#profileUpload').on('change', function() {
-            const fileInput = $(this)[0];
-            const file = fileInput.files[0];
-
-            // Update the label text with the selected file name
-            $(this).next('#profileLabel').text(file.name);
-
-            // Set profileValid to true when a new profile picture is selected
-            profileValid = true;
-
-            // Check if the file type is allowed
-            const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
-            if (allowedTypes.includes(file.type)) {
-                // Read the selected file and display the preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#profilePreview').attr('src', e.target.result); // Set image source to preview element
-                    $('input[name="profile"]').removeClass('input-error');
-                    $('.custom-file-label[for="profileUpload"]').removeClass('input-error'); // Remove input-error class from the label as well
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Show warning message for invalid file type
-                showWarningMessage('Please select a valid image file (PNG, JPG, WEBP).');
-                profileValid = false;
-                $('#profileUpload').val(''); // Clear the file input
-                $('input[name="profile"]').addClass('input-error');
-                $('.custom-file-label[for="profileUpload"]').addClass('input-error'); // Add input-error class to the label as well
-            }
-        });
-
-        // Function to handle form submission
-        $('#addUser').on('click', function(e) {
-            e.preventDefault(); // Prevent default form submission
-
-            var formData = new FormData($('#addForm')[0]); // Create FormData object
-
-            const requiredFields = $('#addForm').find('[required], select[required]');
-
-            let fieldsAreValid = true; // Initialize as true
-
-            // Remove existing error classes
-            $('.form-control').removeClass('input-error');
-
-            requiredFields.each(function() {
-                // Check if the element is a select and it doesn't have a selected value
-                if ($(this).is('select') && $(this).val() === null) {
-                    fieldsAreValid = false; // Set to false if any required select field doesn't have a value
-                    showWarningMessage('Please fill-up the required fields.');
-                    $(this).addClass('input-error'); // Add red border to missing field
-                } else if ($(this).val().trim() === '') {
-                    fieldsAreValid = false; // Set to false if any required field is empty
-                    showWarningMessage('Please fill-up the required fields.');
-                    $(this).addClass('input-error'); // Add red border to missing field
-                } else {
-                    $(this).removeClass('input-error'); // Remove red border if field is filled
-                }
-            });
-
-            let passwordsAreValid = true; // Initialize as true
-            const password = formData.get('password');
-            const confirmPassword = formData.get('confirm_password');
-
-            if (fieldsAreValid) {
-                if (password !== confirmPassword) {
-                    passwordsAreValid = false;
-                    showWarningMessage("Passwords don't match. Please check and try again.");
-                    $('input[name="password"]').addClass('is-invalid');
-                    $('input[name="confirm_password"]').addClass('is-invalid'); // Add red border to confirm password field
-                } else {
-                    $('input[name="password"]').removeClass('is-invalid');
-                    $('input[name="confirm_password"]').removeClass('is-invalid'); // Remove red border if passwords match
-                }
-            }
-
-            if (fieldsAreValid && passwordsAreValid) {
-                if (!profileValid) {
-                    showWarningMessage('Please upload a valid profile picture.');
-                    $('#profileUpload').addClass('input-error');
-                    $('#profileLabel').addClass('input-error'); // Add input-error class to the label as well
-                    return; // Stop form submission
-                }
-
-                checkExistingUser(formData).then(() => {
+            // Function to check if email or username exists
+            const checkExistingUser = (formData, userId) => {
+                return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: 'action/add_user.php',
+                        url: 'action/check_user_existence.php', // URL to check the database
                         type: 'POST',
-                        data: formData,
+                        data: formData, // Serialize form data
                         contentType: false,
                         processData: false,
                         success: function(response) {
-                            // Handle success response
-                            if (response.trim() === 'success') {
+                            if (response.exists) {
+                                // Highlight the corresponding input fields with red border
+                                if (response.exists.username && response.exists.email) {
+                                    showWarningMessage('Email and Username already exist.');
+                                    $('#edit_' + userId).find('input[name="username"]').addClass('input-error');
+                                    $('#edit_' + userId).find('input[name="email"]').addClass('input-error');
+                                } else if (response.exists.email) {
+                                    showWarningMessage('Email already exists.');
+                                    $('#edit_' + userId).find('input[name="email"]').addClass('input-error');
+                                } else if (response.exists.username) {
+                                    showWarningMessage('Username already exists.');
+                                    $('#edit_' + userId).find('input[name="username"]').addClass('input-error');
+                                }
+                                reject(); // Reject the promise if user already exists
+                            } else {
+                                resolve(); // Resolve the promise if user doesn't exist
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText); // Output error response to console (for debugging)
+                            reject(); // Reject the promise if there's an error
+                        }
+                    });
+                });
+            };
+
+            // Function to handle file input change event for profile picture
+            $('[id^="profileUpload_"]').on('change', function() {
+                var userId = $(this).attr('id').split('_')[1]; // Extract event ID
+                const fileInput = $(this)[0];
+                const file = fileInput.files[0];
+
+                // Update the label text with the selected file name
+                $(this).next('#profileLabel_' + userId).text(file.name);
+
+                // Check if the file type is allowed
+                const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+                if (allowedTypes.includes(file.type)) {
+                    // Read the selected file and display the preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#profilePreview_' + userId).attr('src', e.target.result); // Set image source to preview element
+                    };
+                    reader.readAsDataURL(file);
+                    profileValid = true; // Reset profileValid if file type is valid
+                } else {
+                    // Show warning message for invalid file type
+                    showWarningMessage('Please select a valid image file (PNG, JPG, WEBP).');
+                    profileValid = false;
+                }
+
+                // Toggle input-error class based on profileValid
+                $(this).toggleClass('input-error', !profileValid);
+                $(this).next('#profileLabel_' + userId).toggleClass('input-error', !profileValid);
+            });
+
+            // For dynamically rendered modals
+            $(document).on('click', '[id^="updateUser_"]', function(e) {
+                e.preventDefault(); // Prevent default form submission
+                var userId = $(this).attr('id').split('_')[1]; // Extract event ID
+                var formData = new FormData($('#edit_' + userId + ' form')[0]);
+
+                const requiredFields = $('#edit_' + userId).find('input[required], select[required]');
+
+                let fieldsAreValid = true; // Initialize as true
+
+                // Remove existing error classes
+                $('.form-control').removeClass('input-error');
+
+                requiredFields.each(function() {
+                    // Check if the element is a select and it doesn't have a selected value
+                    if ($(this).is('select') && $(this).val() === null) {
+                        fieldsAreValid = false; // Set to false if any required select field doesn't have a value
+                        showWarningMessage('Please fill-up the required fields.');
+                        $(this).addClass('input-error'); // Add red border to missing field
+                    } else if ($(this).val().trim() === '') {
+                        fieldsAreValid = false; // Set to false if any required field is empty
+                        showWarningMessage('Please fill-up the required fields.');
+                        $(this).addClass('input-error'); // Add red border to missing field
+                    } else {
+                        $(this).removeClass('input-error'); // Remove red border if field is filled
+                    }
+                });
+
+                let passwordsAreValid = true; // Initialize as true
+                const password = formData.get('password');
+                const confirmPassword = formData.get('confirm_password');
+
+                if (fieldsAreValid) {
+                    if (password !== '' && password !== confirmPassword) {
+                        passwordsAreValid = false;
+                        showWarningMessage("Passwords don't match. Please check and try again.");
+                        $('#edit_' + userId).find('input[name="password"]').addClass('is-invalid');
+                        $('#edit_' + userId).find('input[name="confirm_password"]').addClass('is-invalid'); // Add red border to confirm password field
+                    } else {
+                        $('#edit_' + userId).find('input[name="password"]').removeClass('is-invalid');
+                        $('#edit_' + userId).find('input[name="confirm_password"]').removeClass('is-invalid'); // Remove red border if passwords match
+                    }
+                }
+
+                if (fieldsAreValid && passwordsAreValid) {
+                    checkExistingUser(formData, userId).then(() => {
+                        // Check if profile picture is changed
+                        if (!profileValid) {
+                            showWarningMessage('Please upload a valid profile picture.');
+                            $('[id^="profileUpload_"]').addClass('input-error');
+                            $('[id^="profileLabel_"]').addClass('input-error');
+                            return; // Stop form submission
+                        }
+
+                        $.ajax({
+                            url: 'action/update_user.php', // file to submit the form data
+                            type: 'POST',
+                            data: formData, // Form data to be submitted
+                            contentType: false, // Important: Prevent jQuery from setting contentType
+                            processData: false, // Important: Prevent jQuery from processing data
+                            dataType: 'json',
+                            success: function(response) {
+                                // Handle the success response
+                                console.log(response); // Output response to console (for debugging)
+                                if (response.status === 'success') {
+                                    Swal.fire(
+                                        'Success!',
+                                        response.message,
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        response.message,
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle the error response
+                                console.error(xhr.responseText); // Output error response to console (for debugging)
                                 Swal.fire({
-                                    icon: 'success',
-                                    title: 'User added successfully',
-                                    showConfirmButton: true,
+                                    icon: 'error',
+                                    title: 'Failed to update User',
+                                    text: 'Please try again later.',
+                                    showConfirmButton: true, // Show OK button
                                     confirmButtonText: 'OK'
                                 }).then(() => {
                                     location.reload();
                                 });
-                            } else {
-                                // Show error message if response is not 'success'
-                                showWarningMessage('Failed to add user. Please try again later.');
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                            showWarningMessage('Failed to add user. Please try again later.');
-                        }
+                        });
+                    }).catch(() => {
+                        // If user exists, do nothing (error message already shown)
                     });
-                }).catch(() => {
-                    // If user exists, do nothing (error message already shown)
-                });
-            }
-        });
-    });
-</script> -->
-
-<!-- <script>
-    $(document).ready(function() {
-        // Variable to track if the profile picture is changed
-        let profileValid = true;
-
-        // Function to show SweetAlert2 warning message
-        const showWarningMessage = (message) => {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: message
-            });
-        };
-
-        // Function to check if email or username exists
-        const checkExistingUser = (formData, userId) => {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: 'action/check_user_existence.php', // URL to check the database
-                    type: 'POST',
-                    data: formData, // Serialize form data
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        if (response.exists) {
-                            // Highlight the corresponding input fields with red border
-                            if (response.exists.username && response.exists.email) {
-                                showWarningMessage('Email and Username already exist.');
-                                $('#edit_' + userId).find('input[name="username"]').addClass('input-error');
-                                $('#edit_' + userId).find('input[name="email"]').addClass('input-error');
-                            } else if (response.exists.email) {
-                                showWarningMessage('Email already exists.');
-                                $('#edit_' + userId).find('input[name="email"]').addClass('input-error');
-                            } else if (response.exists.username) {
-                                showWarningMessage('Username already exists.');
-                                $('#edit_' + userId).find('input[name="username"]').addClass('input-error');
-                            }
-                            reject(); // Reject the promise if user already exists
-                        } else {
-                            resolve(); // Resolve the promise if user doesn't exist
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText); // Output error response to console (for debugging)
-                        reject(); // Reject the promise if there's an error
-                    }
-                });
-            });
-        };
-
-        // Function to handle file input change event for profile picture
-        $('[id^="profileUpload_"]').on('change', function() {
-            var userId = $(this).attr('id').split('_')[1]; // Extract event ID
-            const fileInput = $(this)[0];
-            const file = fileInput.files[0];
-
-            // Update the label text with the selected file name
-            $(this).next('#profileLabel_' + userId).text(file.name);
-
-            // Check if the file type is allowed
-            const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
-            if (allowedTypes.includes(file.type)) {
-                // Read the selected file and display the preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#profilePreview_' + userId).attr('src', e.target.result); // Set image source to preview element
-                };
-                reader.readAsDataURL(file);
-                profileValid = true; // Reset profileValid if file type is valid
-            } else {
-                // Show warning message for invalid file type
-                showWarningMessage('Please select a valid image file (PNG, JPG, WEBP).');
-                profileValid = false;
-            }
-
-            // Toggle input-error class based on profileValid
-            $(this).toggleClass('input-error', !profileValid);
-            $(this).next('#profileLabel_' + userId).toggleClass('input-error', !profileValid);
-        });
-
-        // For dynamically rendered modals
-        $(document).on('click', '[id^="updateUser_"]', function(e) {
-            e.preventDefault(); // Prevent default form submission
-            var userId = $(this).attr('id').split('_')[1]; // Extract event ID
-            var formData = new FormData($('#edit_' + userId + ' form')[0]);
-
-            const requiredFields = $('#edit_' + userId).find('input[required], select[required]');
-
-            let fieldsAreValid = true; // Initialize as true
-
-            // Remove existing error classes
-            $('.form-control').removeClass('input-error');
-
-            requiredFields.each(function() {
-                // Check if the element is a select and it doesn't have a selected value
-                if ($(this).is('select') && $(this).val() === null) {
-                    fieldsAreValid = false; // Set to false if any required select field doesn't have a value
-                    showWarningMessage('Please fill-up the required fields.');
-                    $(this).addClass('input-error'); // Add red border to missing field
-                } else if ($(this).val().trim() === '') {
-                    fieldsAreValid = false; // Set to false if any required field is empty
-                    showWarningMessage('Please fill-up the required fields.');
-                    $(this).addClass('input-error'); // Add red border to missing field
-                } else {
-                    $(this).removeClass('input-error'); // Remove red border if field is filled
                 }
             });
-
-            let passwordsAreValid = true; // Initialize as true
-            const password = formData.get('password');
-            const confirmPassword = formData.get('confirm_password');
-
-            if (fieldsAreValid) {
-                if (password !== '' && password !== confirmPassword) {
-                    passwordsAreValid = false;
-                    showWarningMessage("Passwords don't match. Please check and try again.");
-                    $('#edit_' + userId).find('input[name="password"]').addClass('is-invalid');
-                    $('#edit_' + userId).find('input[name="confirm_password"]').addClass('is-invalid'); // Add red border to confirm password field
-                } else {
-                    $('#edit_' + userId).find('input[name="password"]').removeClass('is-invalid');
-                    $('#edit_' + userId).find('input[name="confirm_password"]').removeClass('is-invalid'); // Remove red border if passwords match
-                }
-            }
-
-            if (fieldsAreValid && passwordsAreValid) {
-                checkExistingUser(formData, userId).then(() => {
-                    // Check if profile picture is changed
-                    if (!profileValid) {
-                        showWarningMessage('Please upload a valid profile picture.');
-                        $('[id^="profileUpload_"]').addClass('input-error');
-                        $('[id^="profileLabel_"]').addClass('input-error');
-                        return; // Stop form submission
-                    }
-
-                    $.ajax({
-                        url: 'action/update_user.php', // file to submit the form data
-                        type: 'POST',
-                        data: formData, // Form data to be submitted
-                        contentType: false, // Important: Prevent jQuery from setting contentType
-                        processData: false, // Important: Prevent jQuery from processing data
-                        dataType: 'json',
-                        success: function(response) {
-                            // Handle the success response
-                            console.log(response); // Output response to console (for debugging)
-                            if (response.status === 'success') {
-                                Swal.fire(
-                                    'Success!',
-                                    response.message,
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Error!',
-                                    response.message,
-                                    'error'
-                                );
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle the error response
-                            console.error(xhr.responseText); // Output error response to console (for debugging)
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Failed to update User',
-                                text: 'Please try again later.',
-                                showConfirmButton: true, // Show OK button
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        }
-                    });
-                }).catch(() => {
-                    // If user exists, do nothing (error message already shown)
-                });
-            }
         });
-    });
-</script> -->
+    </script> -->
 
 </body>
 
