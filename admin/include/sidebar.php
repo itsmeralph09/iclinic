@@ -42,6 +42,7 @@
                         <h6 class="collapse-header">Students</h6>
                         <a class="collapse-item" href="students-pending.php">Pending</a>
                         <a class="collapse-item" href="students-approved.php">Approved</a>
+                        <a class="collapse-item" href="students-archived.php">Archived</a>
                     </div>
                 </div>
             </li>
@@ -59,6 +60,7 @@
                         <h6 class="collapse-header">Employees</h6>
                         <a class="collapse-item" href="">Pending</a>
                         <a class="collapse-item" href="">Approved</a>
+                        <a class="collapse-item" href="">Archived</a>
                     </div>
                 </div>
             </li>
@@ -74,8 +76,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Admins</h6>
-                        <a class="collapse-item" href="">Pending</a>
-                        <a class="collapse-item" href="">Approved</a>
+                        <a class="collapse-item" href="">Active</a>
+                        <a class="collapse-item" href="">Archived</a>
                     </div>
                 </div>
             </li>
@@ -88,22 +90,23 @@
                 Manage Appointments
             </div>
 
+            <!-- Nav Item - Admin Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="users.php">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Pending Appointments</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="staffs.php">
-                    <i class="fas fa-fw fa-user-tie"></i>
-                    <span>Approved Appointments</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="staffs.php">
-                    <i class="fas fa-fw fa-user-tie"></i>
-                    <span>Completed Appointments</span></a>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#appointmentCollapse"
+                    aria-expanded="true" aria-controls="appointmentCollapse">
+                    <i class="fas fa-fw fa-calendar"></i>
+                    <span>Appointments</span>
+                </a>
+                <div id="appointmentCollapse" class="collapse" aria-labelledby=""
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Appointments</h6>
+                        <a class="collapse-item" href=""><i class="fa-regular fa-square mr-2"></i>Pending</a>
+                        <a class="collapse-item" href=""><i class="fa-regular fa-square-check mr-2"></i>Approved</a>
+                        <a class="collapse-item" href=""><i class="fa-solid fa-square mr-2"></i>Completed</a>
+                        <a class="collapse-item" href=""><i class="fa-solid fa-square-xmark mr-2"></i>Declined</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->

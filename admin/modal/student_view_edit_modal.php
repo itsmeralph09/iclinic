@@ -49,6 +49,14 @@
                                             <input type="text" readonly class="form-control-plaintext custom-readonly-input" id="suffix_name" value="<?php echo $suffix_name; ?>">
                                         </div>
                                     </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-4">
+                                            <label for="student_no" class="col-form-label text-primary">Student No</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" readonly class="form-control-plaintext custom-readonly-input" id="student_no" value="<?php echo $student_no; ?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-5">

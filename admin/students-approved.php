@@ -60,7 +60,7 @@
                                             <?php
 
                                                 require '../db/dbconn.php';
-                                                $display_users = "SELECT st.*, ut.user_id, ut.email, ut.role, ut.status
+                                                $display_users = "SELECT st.*, ut.user_id, ut.no, ut.email, ut.role, ut.status
                                                                     FROM student_tbl st
                                                                     INNER JOIN user_tbl ut ON ut.user_id = st.user_id
                                                                     WHERE ut.status = 'APPROVED' AND ut.deleted = 0
@@ -71,6 +71,7 @@
 
                                                 while($row = mysqli_fetch_array($sqlQuery)){
                                                     $user_id = $row['user_id'];
+                                                    $student_no = $row['no'];
                                                     $first_name = $row['first_name'];
                                                     $mid_name = $row['middle_name'];
                                                     $last_name = $row['last_name'];
