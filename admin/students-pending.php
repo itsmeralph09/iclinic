@@ -60,7 +60,7 @@
                                             <?php
 
                                                 require '../db/dbconn.php';
-                                                $display_users = "SELECT st.*, ut.user_id, ut.email, ut.role, ut.status
+                                                $display_users = "SELECT st.*, ut.user_id, ut.no, ut.email, ut.role, ut.status
                                                                     FROM student_tbl st
                                                                     INNER JOIN user_tbl ut ON ut.user_id = st.user_id
                                                                     WHERE ut.status = 'PENDING' AND ut.deleted = 0
@@ -71,6 +71,7 @@
 
                                                 while($row = mysqli_fetch_array($sqlQuery)){
                                                     $user_id = $row['user_id'];
+                                                    $student_no = $row['no'];
                                                     $first_name = $row['first_name'];
                                                     $mid_name = $row['middle_name'];
                                                     $last_name = $row['last_name'];
@@ -137,12 +138,14 @@
                                                 <a href="#" class="btn btn-sm btn-success approve-student-btn"
                                                    data-user-id="<?php echo $user_id; ?>"
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
+                                                   data-user-no="<?php echo htmlspecialchars($student_no); ?>"
                                                    data-user-course="<?php echo htmlspecialchars($course); ?>">
                                                    <i class="fa-solid fa-check"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-sm btn-danger decline-student-btn"
                                                    data-user-id="<?php echo $user_id; ?>" 
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
+                                                   data-user-no="<?php echo htmlspecialchars($student_no); ?>"
                                                    data-user-course="<?php echo htmlspecialchars($course); ?>">
                                                    <i class="fa-solid fa-xmark"></i>
                                                 </a>
@@ -206,11 +209,13 @@
                 var declineButton = $(this);
                 var userId = declineButton.data('user-id');
                 var userName = decodeURIComponent(declineButton.data('user-name'));
+                var userNo = decodeURIComponent(declineButton.data('user-no'));
                 var userCourse = decodeURIComponent(declineButton.data('user-course'));
                 Swal.fire({
                     title: 'Decline Student Account Registration',
                     html: "You are about to decline the following student:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
+                          "<strong>Student No.:</strong> " + userNo + "<br>" +
                           "<strong>Course:</strong> " + userCourse + "<br>",
                     icon: 'question',
                     showCancelButton: true,
@@ -266,11 +271,13 @@
                 var approveButton = $(this);
                 var userId = approveButton.data('user-id');
                 var userName = decodeURIComponent(approveButton.data('user-name'));
+                var userNo = decodeURIComponent(approveButton.data('user-no'));
                 var userCourse = decodeURIComponent(approveButton.data('user-course'));
                 Swal.fire({
                     title: 'Approve Student Account Registration',
                     html: "You are about to approve the following student:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
+                          "<strong>Student No.:</strong> " + userNo + "<br>" +
                           "<strong>Course:</strong> " + userCourse + "<br>",
                     icon: 'question',
                     showCancelButton: true,

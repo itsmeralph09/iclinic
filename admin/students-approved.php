@@ -138,6 +138,7 @@
                                                 <a href="#" class="btn btn-sm btn-danger delete-student-btn"
                                                    data-user-id="<?php echo $user_id; ?>" 
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
+                                                   data-user-no="<?php echo htmlspecialchars($student_no); ?>"
                                                    data-user-course="<?php echo htmlspecialchars($course); ?>">
                                                    <i class="fa-solid fa-trash"></i>
                                                 </a>
@@ -201,11 +202,13 @@
                 var declineButton = $(this);
                 var userId = declineButton.data('user-id');
                 var userName = decodeURIComponent(declineButton.data('user-name'));
+                var userNo = decodeURIComponent(declineButton.data('user-no'));
                 var userCourse = decodeURIComponent(declineButton.data('user-course'));
                 Swal.fire({
                     title: 'Delete Student Account',
                     html: "You are about to delete the following student:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
+                          "<strong>Student No.:</strong> " + userNo + "<br>" +
                           "<strong>Course:</strong> " + userCourse + "<br>",
                     icon: 'warning',
                     showCancelButton: true,
