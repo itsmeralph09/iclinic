@@ -132,12 +132,12 @@
                                             <td class=""><?php echo $contact; ?></td>
                                             <td class="text-center">
                                                 <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
-                                                <a href="#" class="btn btn-sm btn-info restore-student-btn"
-                                                   data-user-id="<?php echo $user_id; ?>" 
+                                                <a href="#" class="btn btn-sm btn-success approve-student-btn"
+                                                   data-user-id="<?php echo $user_id; ?>"
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-no="<?php echo htmlspecialchars($student_no); ?>"
                                                    data-user-course="<?php echo htmlspecialchars($course); ?>">
-                                                   <i class="fa-solid fa-arrow-rotate-left"></i>
+                                                   <i class="fa-solid fa-check"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -190,32 +190,32 @@
         });
     </script>
 
-    <!-- Decline Students Account Registration -->
+    <!-- Approve Students Account Registration -->
     <script>
         $(document).ready(function() {
             // Function for deleting event
-            $('.restore-student-btn').on('click', function(e) {
+            $('.approve-student-btn').on('click', function(e) {
                 e.preventDefault();
-                var declineButton = $(this);
-                var userId = declineButton.data('user-id');
-                var userName = decodeURIComponent(declineButton.data('user-name'));
-                var userNo = decodeURIComponent(declineButton.data('user-no'));
-                var userCourse = decodeURIComponent(declineButton.data('user-course'));
+                var approveButton = $(this);
+                var userId = approveButton.data('user-id');
+                var userName = decodeURIComponent(approveButton.data('user-name'));
+                var userNo = decodeURIComponent(approveButton.data('user-no'));
+                var userCourse = decodeURIComponent(approveButton.data('user-course'));
                 Swal.fire({
-                    title: 'Restore Deleted Student Account',
-                    html: "You are about to restore the following student:<br><br>" +
+                    title: 'Approve Student Account Registration',
+                    html: "You are about to approve the following student:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
                           "<strong>Student No.:</strong> " + userNo + "<br>" +
                           "<strong>Course:</strong> " + userCourse + "<br>",
-                    icon: 'info',
+                    icon: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#36b9cc',
+                    confirmButtonColor: '#1cc88a',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, restore!'
+                    confirmButtonText: 'Yes, approve!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'action/restore_student.php', // Corrected 'file' to 'url'
+                            url: 'action/approve_student.php', // Corrected 'file' to 'url'
                             type: 'POST',
                             data: {
                                 user_id: userId
@@ -223,8 +223,8 @@
                             success: function(response) {
                                 if (response.trim() === 'success') {
                                     Swal.fire(
-                                        'Restored!',
-                                        'Student has been restored.',
+                                        'Approved!',
+                                        'Student has been approved.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -232,7 +232,7 @@
                                 } else {
                                     Swal.fire(
                                         'Error!',
-                                        'Failed to restore student.',
+                                        'Failed to approve student.',
                                         'error'
                                     );
                                 }
@@ -241,7 +241,7 @@
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
-                                    'Failed to restore student.',
+                                    'Failed to approve student.',
                                     'error'
                                 );
                             }
@@ -251,6 +251,7 @@
             });
         });
     </script>
+
 
 </body>
 
