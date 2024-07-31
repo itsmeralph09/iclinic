@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<?php include './include/head.php'; ?>
+
+<body id="page-top">
+    <div class="d-none" id="appointments"></div>
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <?php include './include/sidebar.php'; ?>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <?php include './include/topbar.php'; ?>
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">My Appointments</h1>
+                        
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+								<div class="card-header py-3 d-flex flex-column flex-md-row">
+								    <div class="col-12 col-md-6 d-flex align-items-center justify-content-start mx-0 px-0 mb-2 mb-md-0">
+								        <h6 class="font-weight-bold text-primary mb-0">List of My Appointments</h6>
+								    </div>
+								    <div class="col-12 col-md-6 d-flex align-items-center justify-content-end mx-0 px-0">
+								    	<div class="col-12 col-md-4 float-right mx-0 px-0">
+								        	<a data-toggle="modal" data-target="#addNew" class="btn btn-success shadow-sm w-100 h-100"><i class="fa-solid fa-plus mr-1"></i>New Appointment</a>
+								        </div>
+								    </div>
+								</div>
+
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered nowrap" id="myTable" width="100%" cellspacing="0">
+                                            <thead class="">
+                                                <tr>
+                                                  
+                                                    <th scope="col">#</th>                                        
+                                                    <th scope="col">Appointment No.</th>                                        
+                                                    <th scope="col">Appointment Description</th>                                               
+                                                    <th scope="col">Appointment Date</th>                                               
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Action</th>                           
+                                                   
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody>
+
+                                            <?php
+
+                                                require '../db/dbconn.php';
+
+                                                $user_id = $_SESSION['user_id'];
+                                                $display_appointments = "
+                                                					SELECT apt.*
+																	FROM appointment_tbl apt
+																	INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+																	INNER JOIN student_tbl st ON st.user_id = ut.user_id
+																	WHERE apt.deleted = 0 AND apt.user_id = '$user_id';
+                                                					";
+                                                $sqlQuery = mysqli_query($con, $display_appointments) or die(mysqli_error($con));
+
+                                                $counter = 1;
+
+                                                while($row = mysqli_fetch_array($sqlQuery)){
+                                                    $appointment_id = $row['appointment_id'];
+                                                    $appointment_no = $row['appointment_no'];
+                                                    $appointment_description = $row['appointment_description'];
+                                                    $appointment_date = $row['appointment_date'];
+                                                    $appointment_status = $row['appointment_status'];
+
+                                            ?>
+                                        <tr>         
+                                            <td class=""><?php echo $counter; ?></td>
+                                            <td class=""><?php echo $appointment_no; ?></td>
+                                            <td class=""><?php echo $appointment_description; ?></td>
+                                            <td class=""><?php echo $appointment_date; ?></td>
+                                            <td class=""><?php echo $appointment_status; ?></td>
+                                           
+                                            <td class="text-center">
+                                                <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $appointment_id; ?>"><i class="fa-solid fa-eye"></i></a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $counter++;
+                                            // include('modal/student_view_edit_modal.php');
+                                        } 
+                                        ?>
+                                        </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php include('modal/appointment_add_modal.php'); ?>
+                    </div>
+                    
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <?php include './include/footer.php'; ?>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <?php include './include/logout_modal.php'; ?>
+
+    <?php include './include/script.php'; ?>
+
+    <script>
+        $(document).ready(function(){
+            //inialize datatable
+            $('#myTable').DataTable({
+                scrollX: true
+            })
+        });
+    </script>
+
+    <!-- Add Modal Script -->
+    <script>
+		 // Description Select Validation
+		 document.addEventListener("DOMContentLoaded", function() {
+		     var descSelect = document.getElementById("appointment_description");
+		     var descDivOthers = document.getElementById("descriptionDivOthers");
+		     var descInput = document.getElementById("appointment_description_others");
+
+		     descSelect.addEventListener("change", function() {
+		         if (descSelect.value === "Others") {
+		             descDivOthers.classList.remove('d-none');
+		             descInput.setAttribute('required', ''); // Add the 'required' attribute
+		             descInput.focus();
+		         } else {
+		             descDivOthers.classList.add('d-none');
+		             descInput.removeAttribute('required'); // Remove the 'required' attribute
+		             descInput.style.border = ''; // Removes the border style
+		         }
+		     });
+		 });
+
+		// Appointment Date Validation
+		document.getElementById('appointment_date').addEventListener('change', function() {
+		    var inputDate = new Date(this.value);
+		    var currentDate = new Date();
+
+		    // Remove the time component from currentDate to compare only the date part
+		    currentDate.setHours(0, 0, 0, 0);
+
+		    // Check if the input date is set and not in the past
+		    if (!this.value || inputDate < currentDate) {
+		        Swal.fire({
+		            icon: 'warning',
+		            title: 'Invalid...',
+		            text: 'Please select a valid appointment date.'
+		        });
+		        $('input[name="appointment_date"]').css('border', '1px solid red');
+		        this.value = ''; // Clear the input field
+		    } else {
+		        $('input[name="appointment_date"]').css('border', ''); // Remove red border if valid
+		    }
+		});
+    </script>
+
+    <!-- Add -->
+    <script>
+	    $(document).ready(function() {
+	        // Function to show SweetAlert2 warning message
+	        const showWarningMessage = (message) => {
+	            Swal.fire({
+	                icon: 'warning',
+	                title: 'Oops...',
+	                text: message
+	            });
+	        };
+
+	        $('#addAppointment').on('click', function(e) {
+	            e.preventDefault(); // Prevent default form submission
+
+	            var formData = $('#addNew form'); // Select the form element
+
+	            const requiredFields = formData.find('[required], select');
+	            let fieldsAreValid = true; // Initialize as true
+
+	            // Remove existing error classes
+	            $('.form-control').removeClass('input-error');
+
+	            requiredFields.each(function() {
+	                // Check if the element is a select and it doesn't have a selected value
+	                if ($(this).is('select') && $(this).val() === null) {
+	                    fieldsAreValid = false; // Set to false if any required select field doesn't have a value
+	                    showWarningMessage('Please fill-up the required fields.');
+	                    $(this).addClass('input-error'); // Add red border to missing field
+	                }
+	                // Check if the element is empty
+	                else if ($(this).val().trim() === '') {
+	                    fieldsAreValid = false; // Set to false if any required field is empty
+	                    showWarningMessage('Please fill-up the required fields.');
+	                    $(this).addClass('input-error'); // Add red border to missing field
+	                } else {
+	                    $(this).removeClass('input-error'); // Remove red border if field is filled
+	                }
+	            });
+
+	            if (fieldsAreValid) {
+	                // If department doesn't exist, proceed with form submission
+	                $.ajax({
+	                    url: 'action/add_appointment.php', // URL to submit the form data
+	                    type: 'POST',
+	                    data: formData.serialize(), // Serialize form data
+	                    success: function(response) {
+	                        // Handle the success response
+	                        console.log(response); // Output response to console (for debugging)
+	                        Swal.fire({
+	                            icon: 'success',
+	                            title: 'Appointment added successfully',
+	                            showConfirmButton: true, // Show OK button
+	                            confirmButtonText: 'OK'
+	                        }).then(() => {
+	                            location.reload();
+	                        });
+	                    },
+	                    error: function(xhr, status, error) {
+	                        // Handle the error response
+	                        console.error(xhr.responseText); // Output error response to console (for debugging)
+	                        Swal.fire({
+	                            icon: 'error',
+	                            title: 'Failed to add appointment',
+	                            text: 'Please try again later.',
+	                            showConfirmButton: true, // Show OK button
+	                            confirmButtonText: 'OK'
+	                        }).then(() => {
+	                            location.reload();
+	                        });
+	                    }
+	                });
+	            }
+	        });
+	    });
+	</script>
+
+
+</body>
+
+</html>
