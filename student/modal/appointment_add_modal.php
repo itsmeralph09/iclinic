@@ -20,6 +20,9 @@
 							</div>
 							<div class="col-12">
 								<input class="form-control" id="appointment_date" name="appointment_date" type="date" required>
+							    <div class="invalid-feedback">
+							    	Please choose a valid Appointment Date.
+							    </div>
 							</div>
 						</div>
 						<div class="row form-group" id="descriptionDiv">
@@ -28,13 +31,16 @@
 							</div>
 							<div class="col-sm-12">
 								<select name="appointment_description" class="form-control form-select custom-select" id="appointment_description" required>
-                                   <option value="" disabled selected>Select a description/reason</option>
+                                   <option value="" disabled selected>Select a description or reason</option>
                                    <option value="Medical Checkup">Medical Checkup</option>
                                    <option value="Medical Consultation">Medical Consultation</option>
                                    <option value="Dental Checkup">Dental Checkup</option>
                                    <option value="Dental Consultation">Dental Consultation</option>
                                    <option value="Others">Others</option>
                                 </select>
+                                <div class="invalid-feedback">
+							    	Please choose a Description or Reason.
+							    </div>
 							</div>
 						</div>
 						<div class="row form-group d-none" id="descriptionDivOthers">
@@ -43,6 +49,9 @@
 							</div>
 							<div class="col-12">
 								<textarea class="form-control" id="appointment_description_others" name="appointment_description_others"></textarea>
+								<div class="invalid-feedback">
+							    	Please input a valid Description or Reason.
+							    </div>
 							</div>
 						</div>
 		            </div> 

@@ -87,16 +87,27 @@
                                                     $appointment_date = $row['appointment_date'];
                                                     $appointment_status = $row['appointment_status'];
 
+                                                    // Format the appointment date
+            										$formatted_date = date('M d, Y', strtotime($appointment_date));
+
+                                                    if ($appointment_status == 'PENDING') {
+                                                        $status_text = "<p class='text-warning text-center'>PENDING</p>";
+                                                    } elseif ($appointment_status == 'APPROVED') {
+                                                        $status_text = "<p class='text-success text-center'>APPROVED</p>";
+                                                    } elseif ($appointment_status == 'COMPLETED') {
+                                                        $status_text = "<p class='text-primary text-center'>COMPLETED</p>";
+                                                    }
+                                                    
                                             ?>
                                         <tr>         
                                             <td class=""><?php echo $counter; ?></td>
                                             <td class=""><?php echo $appointment_no; ?></td>
                                             <td class=""><?php echo $appointment_description; ?></td>
-                                            <td class=""><?php echo $appointment_date; ?></td>
-                                            <td class=""><?php echo $appointment_status; ?></td>
+                                            <td class=""><?php echo $formatted_date; ?></td>
+                                            <td class=""><?php echo $status_text; ?></td>
                                            
                                             <td class="text-center">
-                                                <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $appointment_id; ?>"><i class="fa-solid fa-eye"></i></a>
+                                                <a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $appointment_id; ?>"><i class="fa-solid fa-eye"></i></a>
                                             </td>
                                         </tr>
                                         <?php
@@ -211,7 +222,7 @@
 	            var formData = $('#addNew form'); // Select the form element
 
 	            const requiredFields = formData.find('[required], select');
-	            let fieldsAreValid = true; // Initialize as true
+	            let fieldsAreValid = false; // Initialize as false
 
 	            // Remove existing error classes
 	            $('.form-control').removeClass('input-error');
@@ -221,15 +232,15 @@
 	                if ($(this).is('select') && $(this).val() === null) {
 	                    fieldsAreValid = false; // Set to false if any required select field doesn't have a value
 	                    showWarningMessage('Please fill-up the required fields.');
-	                    $(this).addClass('input-error'); // Add red border to missing field
+	                    $(this).addClass('is-invalid'); // Add red border to missing field
 	                }
 	                // Check if the element is empty
 	                else if ($(this).val().trim() === '') {
 	                    fieldsAreValid = false; // Set to false if any required field is empty
 	                    showWarningMessage('Please fill-up the required fields.');
-	                    $(this).addClass('input-error'); // Add red border to missing field
+	                    $(this).addClass('is-invalid'); // Add red border to missing field
 	                } else {
-	                    $(this).removeClass('input-error'); // Remove red border if field is filled
+	                    $(this).removeClass('is-invalid'); // Remove red border if field is filled
 	                }
 	            });
 
