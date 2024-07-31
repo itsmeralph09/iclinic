@@ -14,7 +14,7 @@
 	            <div class="modal-body">
 					<div class="container-fluid">
 						<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-						<div class="row form-group">
+						<div class="row form-group mb-3">
 							<div class="col-12">
 								<label class="control-label modal-label" for="appointment_date">Appointment Date</label>
 							</div>
@@ -25,7 +25,7 @@
 							    </div>
 							</div>
 						</div>
-						<div class="row form-group" id="descriptionDiv">
+						<div class="row form-group mb-3" id="descriptionDiv">
 							<div class="col-sm-12">
 								<label class="control-label modal-label" for="appointment_description">Appointment Description</label>
 							</div>
@@ -43,7 +43,7 @@
 							    </div>
 							</div>
 						</div>
-						<div class="row form-group d-none" id="descriptionDivOthers">
+						<div class="row form-group d-none mb-3" id="descriptionDivOthers">
 							<div class="col-12">
 								<label class="control-label modal-label" for="appointment_description_others">Please Input Other Appointment Description</label>
 							</div>
