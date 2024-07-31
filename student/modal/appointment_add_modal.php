@@ -5,7 +5,7 @@
             <div class="modal-header">
             	<div class="row float-left ml-2">
             		<h4 class="modal-title float-left text-success" id="myModalLabel">
-            			<i class="fas fa-plus fa-sm"></i> Add New Appointment
+            			<i class="fas fa-plus fa-sm"></i> New Appointment
             		</h4>
             	</div>
                 <div class="row float-right mr-2"><button type="button" class="close float-right" data-dismiss="modal" aria-hidden="true">&times;</button></div>

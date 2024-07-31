@@ -161,7 +161,7 @@
 		         if (descSelect.value === "Others") {
 		             descDivOthers.classList.remove('d-none');
 		             descInput.setAttribute('required', ''); // Add the 'required' attribute
-		             descInput.focus();
+		             // descInput.focus();
 		         } else {
 		             descDivOthers.classList.add('d-none');
 		             descInput.removeAttribute('required'); // Remove the 'required' attribute
@@ -182,7 +182,7 @@
 		    if (!this.value || inputDate < currentDate) {
 		        Swal.fire({
 		            icon: 'warning',
-		            title: 'Invalid...',
+		            title: 'Oops...',
 		            text: 'Please select a valid appointment date.'
 		        });
 		        $('input[name="appointment_date"]').css('border', '1px solid red');
@@ -242,14 +242,26 @@
 	                    success: function(response) {
 	                        // Handle the success response
 	                        console.log(response); // Output response to console (for debugging)
-	                        Swal.fire({
-	                            icon: 'success',
-	                            title: 'Appointment added successfully',
-	                            showConfirmButton: true, // Show OK button
-	                            confirmButtonText: 'OK'
-	                        }).then(() => {
-	                            location.reload();
-	                        });
+                            if (response === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Appointment added successfully!',
+                                    showConfirmButton: true, // Show OK button
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Failed to add appointment!',
+                                    text: 'Please try again later.',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }
 	                    },
 	                    error: function(xhr, status, error) {
 	                        // Handle the error response
