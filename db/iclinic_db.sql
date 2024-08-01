@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jul 24, 2024 at 02:07 PM
+-- Host: 127.0.0.1
+-- Generation Time: Jul 31, 2024 at 12:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -53,6 +53,30 @@ CREATE TABLE `admin_tbl` (
 
 INSERT INTO `admin_tbl` (`admin_id`, `user_id`, `first_name`, `middle_name`, `last_name`, `suffix_name`, `birthdate`, `age`, `sex`, `contact_no`, `personal_address`, `occupation`, `emergency_contact_name`, `emergency_contact_no`, `emergency_contact_address`, `profile`, `deleted`) VALUES
 (4, 15, 'FRIEDA', 'TREVOR', 'REISS', 'NA', '2001-05-09', 23, 'FEMALE', '09111111111', 'ILANG ILANG STREET', 'STAFF', 'RALPH CUSTODIO', '09222222222', 'PUROK 6, TAUGTOG, BOTOLAN, ZAMBALES', 'REISS_15_20240713023617.png', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment_tbl`
+--
+
+CREATE TABLE `appointment_tbl` (
+  `appointment_id` int(11) NOT NULL,
+  `appointment_no` varchar(255) NOT NULL,
+  `appointment_description` varchar(255) NOT NULL,
+  `appointment_description_others` varchar(255) NOT NULL,
+  `appointment_date` date NOT NULL,
+  `appointment_status` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `appointment_tbl`
+--
+
+INSERT INTO `appointment_tbl` (`appointment_id`, `appointment_no`, `appointment_description`, `appointment_description_others`, `appointment_date`, `appointment_status`, `user_id`, `deleted`) VALUES
+(3, 'APT-20240801-14-952c', 'MEDICAL CHECKUP', 'NONE', '2024-08-01', 'PENDING', 14, 0);
 
 -- --------------------------------------------------------
 
@@ -149,6 +173,12 @@ ALTER TABLE `admin_tbl`
   ADD PRIMARY KEY (`admin_id`);
 
 --
+-- Indexes for table `appointment_tbl`
+--
+ALTER TABLE `appointment_tbl`
+  ADD PRIMARY KEY (`appointment_id`);
+
+--
 -- Indexes for table `employee_tbl`
 --
 ALTER TABLE `employee_tbl`
@@ -175,6 +205,12 @@ ALTER TABLE `user_tbl`
 --
 ALTER TABLE `admin_tbl`
   MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `appointment_tbl`
+--
+ALTER TABLE `appointment_tbl`
+  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `employee_tbl`
