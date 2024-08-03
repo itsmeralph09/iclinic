@@ -84,6 +84,7 @@
                                                     $appointment_id = $row['appointment_id'];
                                                     $appointment_no = $row['appointment_no'];
                                                     $appointment_description = $row['appointment_description'];
+                                                    $appointment_description_others = $row['appointment_description_others'];
                                                     $appointment_date = $row['appointment_date'];
                                                     $appointment_status = $row['appointment_status'];
 
@@ -107,12 +108,12 @@
                                             <td class=""><?php echo $status_text; ?></td>
                                            
                                             <td class="text-center">
-                                                <a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $appointment_id; ?>"><i class="fa-solid fa-eye"></i></a>
+                                                <a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#edit_<?php echo $appointment_id; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                             </td>
                                         </tr>
                                         <?php
                                             $counter++;
-                                            // include('modal/student_view_edit_modal.php');
+                                            include('modal/appointment_edit_modal.php');
                                         } 
                                         ?>
                                         </tbody>
@@ -240,6 +241,7 @@
 	                    showWarningMessage('Please fill-up the required fields.');
 	                    $(this).addClass('is-invalid'); // Add red border to missing field
 	                } else {
+	                	fieldsAreValid = true;
 	                    $(this).removeClass('is-invalid'); // Remove red border if field is filled
 	                }
 	            });
@@ -293,6 +295,146 @@
 	    });
 	</script>
 
+	<!-- Edit Modal Script -->
+	<script>
+		$(document).ready(function() {
+		    // Description Select Validation
+		    $(document).on('change', '[id^="appointment_description_"]', function() {
+		        var descSelect = $(this);
+		        var modal = descSelect.closest('.modal');
+		        var descDivOthers = modal.find('[id^="descriptionDivOthers_"]');
+		        var descInput = modal.find('[id^="appointment_descriptionOthers_"]');
+
+		        if (descSelect.val() === "Others") {
+		            descDivOthers.removeClass('d-none');
+		            descInput.attr('required', ''); // Add the 'required' attribute
+		        } else {
+		            descDivOthers.addClass('d-none');
+		            descInput.removeAttr('required'); // Remove the 'required' attribute
+		            descInput.val(''); // Clear the input field
+		            descInput.css('border', ''); // Remove the border style
+		        }
+
+		    });
+
+		    // Appointment Date Validation
+		    $(document).on('change', '[id^="appointment_date_"]', function() {
+		        var inputDate = new Date($(this).val());
+		        var currentDate = new Date();
+
+		        currentDate.setHours(0, 0, 0, 0);
+
+		        if (!$(this).val() || inputDate < currentDate) {
+		            Swal.fire({
+		                icon: 'warning',
+		                title: 'Oops...',
+		                text: 'Please select a valid appointment date.'
+		            });
+		            $(this).css('border', '1px solid red');
+		            $(this).val(''); // Clear the input field
+		        } else {
+		            $(this).css('border', ''); // Remove red border if valid
+		        }
+		    });
+
+		    // Ensure textarea is shown if "Others" is pre-selected on modal open
+		    $(document).on('shown.bs.modal', function(e) {
+		        var modal = $(e.target);
+		        var descSelect = modal.find('[id^="appointment_description_"]');
+		        var descDivOthers = modal.find('[id^="descriptionDivOthers_"]');
+		        var descInput = modal.find('[id^="appointment_descriptionOthers_"]');
+
+		        if (descSelect.val() === "Others") {
+		            descDivOthers.removeClass('d-none');
+		            descInput.attr('required', ''); // Add the 'required' attribute
+		        } else {
+		            descDivOthers.addClass('d-none');
+		            descInput.removeAttr('required'); // Remove the 'required' attribute
+		            descInput.val(''); // Clear the input field
+		            descInput.css('border', ''); // Remove the border style
+		        }
+		    });
+		});
+	</script>
+
+	<!-- Update -->
+    <script>
+        $(document).ready(function() {
+            // Function to show SweetAlert2 messages
+            const showSweetAlert = (icon, title, message) => {
+                Swal.fire({
+                    icon: icon,
+                    title: title,
+                    text: message
+                });
+            };
+
+            // Delegate click event handling to a parent element
+            $(document).on('click', '[id^="updateAppointment_"]', function(e) {
+                e.preventDefault(); // Prevent default form submission
+                var userID = $(this).attr('id').split('_')[1]; // Extract event ID
+                var formData = $('#updateForm_' + userID); // Get the form data
+                var modalDiv = $('#edit_' + userID);
+
+                let fieldsAreValid = true; // Initialize as true
+                // const requiredFields = formData.find('[required]'); // Select required fields
+                const requiredFields = modalDiv.find(':input[required]'); // Select required fields
+
+                // Remove existing error classes
+                $('.form-control').removeClass('input-error');
+
+                requiredFields.each(function() {
+                    // Check if the element is a select and it doesn't have a selected value
+                    if ($(this).is('select') && $(this).val() === null) {
+                        fieldsAreValid = false; // Set to false if any required select field doesn't have a value
+                        showSweetAlert('warning', 'Oops!', 'Please fill-up the required fields.');
+                        $(this).addClass('is-invalid'); // Add red border to missing field
+                    }
+                    // Check if the element is empty
+                    else if ($(this).val().trim() === '') {
+                        fieldsAreValid = false; // Set to false if any required field is empty or null
+                        showSweetAlert('warning', 'Oops!', 'Please fill-up the required fields.');
+                        $(this).addClass('is-invalid'); // Add red border to missing field
+                    } else {
+                        $(this).removeClass('is-invalid'); // Remove red border if field is filled
+                    }
+                });
+                
+                if (fieldsAreValid) {
+                    $.ajax({
+                        url: 'action/update_appointment.php', // URL to submit the form data
+                        type: 'POST',
+                        data: formData.serialize(), // Form data to be submitted
+                        dataType: 'json',
+                        success: function(response) {
+                            // Handle the success response
+                            console.log(response); // Output response to console (for debugging)
+                            if (response.status === 'success') {
+                                Swal.fire(
+                                    'Success!',
+                                    response.message,
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle the error response
+                            console.error(xhr.responseText); // Output error response to console (for debugging)
+                            showSweetAlert('error', 'Error', 'Failed to update user. Please try again later.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
 </body>
 

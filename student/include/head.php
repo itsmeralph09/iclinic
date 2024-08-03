@@ -60,6 +60,19 @@ checkSession();
             background-color: transparent;
             padding-left: 0;
         }
+        body.swal2-shown > [aria-hidden='true'] {
+          transition: 0.1s filter;
+          filter: blur(3px);
+        }
+
+        .custom-input-text {
+            font-style: italic;
+
+            border-bottom: 1.2px dashed #303991;
+
+            background-color: transparent;
+            padding-left: 0;
+        }
     </style>
 
 </head>
