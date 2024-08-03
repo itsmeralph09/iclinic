@@ -108,7 +108,27 @@
                                             <td class=""><?php echo $status_text; ?></td>
                                            
                                             <td class="text-center">
-                                                <a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#edit_<?php echo $appointment_id; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            	<?php if ($appointment_status == 'PENDING') { ?>
+                                            		<a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#edit_<?php echo $appointment_id; ?>">
+                                                		<i class="fa-solid fa-pen-to-square"></i>
+                                                	</a>
+                                                	<a href="#" class="btn btn-sm shadow-sm btn-danger delete-appointment-btn"
+                                                		data-appointment-id="<?php echo $appointment_id; ?>"
+                                                		data-appointment-no="<?php echo $appointment_no; ?>" 
+                                                		data-appointment-date="<?php echo htmlspecialchars($appointment_date); ?>"
+                                                		data-appointment-description="<?php echo htmlspecialchars($appointment_description); ?>"
+                                                		data-appointment-status="<?php echo htmlspecialchars($appointment_status); ?>">
+	                                                   <i class="fa-solid fa-trash"></i>
+	                                                </a>
+                                            	<?php }else { ?>
+                                            		<a class="btn btn-sm shadow-sm btn-primary disabled" disabled data-toggle="modal" data-target="#edit_<?php  ?>">
+                                                		<i class="fa-solid fa-pen-to-square"></i>
+                                                	</a>
+                                                	<a class="btn btn-sm shadow-sm btn-danger disabled" disabled data-toggle="modal" data-target="#edit_<?php  ?>">
+                                                		<i class="fa-solid fa-trash"></i>
+                                                	</a>
+                                            	<?php } ?>
+                                                
                                             </td>
                                         </tr>
                                         <?php
@@ -454,6 +474,69 @@
                         }
                     });
                 }
+            });
+        });
+    </script>
+
+    <!-- Delete -->
+    <script>
+        $(document).ready(function() {
+            // Function for deleting event
+            $('.delete-appointment-btn').on('click', function(e) {
+                e.preventDefault();
+                var deleteButton = $(this);
+                var appointmentID = deleteButton.data('appointment-id');
+                var appointmentDescription = decodeURIComponent(deleteButton.data('appointment-description'));
+                var appointmentNo = decodeURIComponent(deleteButton.data('appointment-no'));
+                var appointmentDate = decodeURIComponent(deleteButton.data('appointment-date'));
+                var appointmentStatus = decodeURIComponent(deleteButton.data('appointment-status'));
+                Swal.fire({
+                    title: 'Delete Appointment',
+                    html: "You are about to delete the following appointment:<br><br>" +
+                          "<strong>Appointment No.:</strong> " + appointmentNo + "<br>" +
+                          "<strong>Appointment Description:</strong> " + appointmentDescription + "<br>" +
+                          "<strong>Appointment Date:</strong> " + appointmentDate + "<br>",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'action/delete_appointment.php',
+                            type: 'POST',
+                            data: {
+                                appointment_id: appointmentID
+                            },
+                            success: function(response) {
+                                if (response.trim() === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Appointment has been deleted.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to delete appointment.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to delete appointment.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>
