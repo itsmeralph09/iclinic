@@ -246,6 +246,17 @@
 	                }
 	            });
 
+	            // Additional validation for appointment date
+	            var appointmentDate = formData.find('#appointment_date').val();
+	            if (appointmentDate === '' || appointmentDate === '0000-00-00' || appointmentDate === null) {
+	                fieldsAreValid = false; // Set to false if date is invalid
+	                showWarningMessage('Please select a valid appointment date.');
+	                formData.find('#appointment_date').addClass('is-invalid'); // Add red border to date field
+	            } else {
+	            	fieldsAreValid = true;
+	                formData.find('#appointment_date').removeClass('is-invalid'); // Remove red border if date is valid
+	            }
+
 	            if (fieldsAreValid) {
 	                // If department doesn't exist, proceed with form submission
 	                $.ajax({
@@ -399,6 +410,17 @@
                         $(this).removeClass('is-invalid'); // Remove red border if field is filled
                     }
                 });
+
+                // Additional validation for appointment date
+	            var appointmentDate = modalDiv.find('#appointment_date_' + userID).val();
+	            if (appointmentDate === '' || appointmentDate === '0000-00-00' || appointmentDate === null) {
+	                fieldsAreValid = false; // Set to false if date is invalid
+	                showSweetAlert('warning', 'Oops!', 'Please select a valid appointment date.');
+	                modalDiv.find('#appointment_date_' + userID).addClass('is-invalid'); // Add red border to date field
+	            } else {
+	            	fieldsAreValid = true;
+	                modalDiv.find('#appointment_date_' + userID).removeClass('is-invalid'); // Remove red border if date is valid
+	            }
                 
                 if (fieldsAreValid) {
                     $.ajax({

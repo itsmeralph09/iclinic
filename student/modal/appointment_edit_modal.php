@@ -16,11 +16,11 @@
                         <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
                         <input type="hidden" name="appointment_id" value="<?php echo $appointment_id; ?>">
                         <div class="row form-group">
-                            <div class="col-4">
+                            <div class="col-sm-6">
                                 <label class="control-label modal-label" for="appointment_no_<?php echo $appointment_id; ?>">Appointment No.</label>
                             </div>
-                            <div class="col-8">
-                                <p class="text-primary custom-input-text"><?php echo $appointment_no; ?></p>
+                            <div class="col-sm-6">
+                                <p class="text-primary custom-input-text mb-0"><?php echo $appointment_no; ?></p>
                             </div>
                         </div>
                         <hr class="">
