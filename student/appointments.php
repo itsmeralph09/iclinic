@@ -98,12 +98,18 @@
                                                     } elseif ($appointment_status == 'COMPLETED') {
                                                         $status_text = "<p class='text-primary text-center'>COMPLETED</p>";
                                                     }
+
+                                                    if ($appointment_description == "OTHERS") {
+                                                    	$appointment_description_text = $appointment_description. ' (' . $appointment_description_others . ') ';
+                                                    } else {
+                                                    	$appointment_description_text = $appointment_description;
+                                                    }
                                                     
                                             ?>
                                         <tr>         
                                             <td class=""><?php echo $counter; ?></td>
                                             <td class=""><?php echo $appointment_no; ?></td>
-                                            <td class=""><?php echo $appointment_description; ?></td>
+                                            <td class=""><?php echo $appointment_description_text; ?></td>
                                             <td class=""><?php echo $formatted_date; ?></td>
                                             <td class=""><?php echo $status_text; ?></td>
                                            
