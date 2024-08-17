@@ -254,6 +254,71 @@
         });
     </script>
 
+    <!-- Approve -->
+    <script>
+        $(document).ready(function() {
+            // Function for deleting event
+            $('.approve-appointment-btn').on('click', function(e) {
+                e.preventDefault();
+                var approveButton = $(this);
+                var appointmentID = approveButton.data('appointment-id');
+                var appointmentDescription = decodeURIComponent(approveButton.data('appointment-description'));
+                var appointmentNo = decodeURIComponent(approveButton.data('appointment-no'));
+                var appointmentName = decodeURIComponent(approveButton.data('appointment-name'));
+                var appointmentDate = decodeURIComponent(approveButton.data('appointment-date'));
+                var appointmentStatus = decodeURIComponent(approveButton.data('appointment-status'));
+                Swal.fire({
+                    title: 'Approve Appointment',
+                    html: "You are about to approve the following appointment:<br><br>" +
+                    	  "<strong>Student Name.:</strong> " + appointmentName + "<br>" +
+                          "<strong>Appointment No.:</strong> " + appointmentNo + "<br>" +
+                          "<strong>Appointment Description:</strong> " + appointmentDescription + "<br>" +
+                          "<strong>Appointment Date:</strong> " + appointmentDate + "<br>",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#1cc88a',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, approve!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'action/approve_appointment.php',
+                            type: 'POST',
+                            data: {
+                                appointment_id: appointmentID
+                            },
+                            success: function(response) {
+                                if (response.trim() === 'success') {
+                                    Swal.fire(
+                                        'Approved!',
+                                        'Appointment has been approved.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to approve appointment.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to approve appointment.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
