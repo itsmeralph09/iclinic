@@ -88,7 +88,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manage Appointments
+                Manage Student Appointments
             </div>
 
             <!-- Nav Item - Admin Collapse Menu -->
@@ -96,16 +96,16 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#appointmentCollapse"
                     aria-expanded="true" aria-controls="appointmentCollapse">
                     <i class="fas fa-fw fa-calendar"></i>
-                    <span>Appointments</span>
+                    <span>Student Appointments</span>
                 </a>
                 <div id="appointmentCollapse" class="collapse" aria-labelledby=""
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Appointments</h6>
-                        <a class="collapse-item" href=""><i class="fa-regular fa-square mr-2"></i>Pending</a>
-                        <a class="collapse-item" href=""><i class="fa-regular fa-square-check mr-2"></i>Approved</a>
-                        <a class="collapse-item" href=""><i class="fa-solid fa-square mr-2"></i>Completed</a>
-                        <a class="collapse-item" href=""><i class="fa-solid fa-square-xmark mr-2"></i>Declined</a>
+                        <h6 class="collapse-header">Students Appointments</h6>
+                        <a class="collapse-item" href="students-appointment-pending.php">Pending</a>
+                        <a class="collapse-item" href="">Approved</a>
+                        <a class="collapse-item" href="">Completed</a>
+                        <a class="collapse-item" href="">Declined</a>
                     </div>
                 </div>
             </li>
