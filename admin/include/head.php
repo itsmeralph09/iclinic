@@ -60,6 +60,15 @@ checkSession();
             background-color: transparent;
             padding-left: 0;
         }
+
+        .custom-input-text {
+            font-style: italic;
+
+            border-bottom: 1.2px dashed #303991;
+
+            background-color: transparent;
+            padding-left: 0;
+        }
     </style>
 
 </head>
