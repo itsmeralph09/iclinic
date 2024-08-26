@@ -48,7 +48,7 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered nowrap" id="myTable" width="100%" cellspacing="0">
+                                        <table class="table table-borderless nowrap" id="myTable" width="100%" cellspacing="0">
                                             <thead class="">
                                                 <tr>
                                                   
