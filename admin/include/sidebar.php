@@ -104,7 +104,7 @@
                         <h6 class="collapse-header">Students Appointments</h6>
                         <a class="collapse-item" href="students-appointment-pending.php">Pending</a>
                         <a class="collapse-item" href="students-appointment-approved.php">Approved</a>
-                        <a class="collapse-item" href="">Completed</a>
+                        <a class="collapse-item" href="students-appointment-completed.php">Completed</a>
                         <a class="collapse-item" href="">Declined</a>
                     </div>
                 </div>
