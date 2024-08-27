@@ -13,10 +13,10 @@
             <form method="POST" id="updateForm_<?php echo $appointment_id; ?>">
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <input type="hidden" name="appointment_id" value="<?php echo $appointment_id; ?>">
-                        <hr class="">
-                        <p class="text-uppercase text-center font-weight-bold">Appointment Information</p>
-                        <hr>
+                        <input type="hidden" class="form-control" name="appointment_id" value="<?php echo $appointment_id; ?>">
+                        <hr class="my-0">
+                        <p class="text-uppercase text-center font-weight-bold my-1">Appointment Information</p>
+                        <hr class="mt-0">
                         <div class="row form-group mb-0">
                             <div class="col-sm-6">
                                 <label class="control-label modal-label">Name</label>
@@ -57,9 +57,9 @@
                                 <p class="text-primary custom-input-text"><?php echo $appointment_description_text; ?></p>
                             </div>
                         </div>
-                        <hr class="">
-                        <p class="text-uppercase text-center font-weight-bold">Patients Vital Information & Diagnosis</p>
-                        <hr>
+                        <hr class="my-0">
+                        <p class="text-uppercase text-center font-weight-bold my-1">Patients Vital Information & Diagnosis</p>
+                        <hr class="mt-0">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="row form-group mb-3">
@@ -131,7 +131,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" name="edit" class="btn btn-primary" id="updateAppointment_<?php echo $appointment_id; ?>">Save</button>
+                    <button type="submit" name="edit" class="btn btn-primary" id="completeAppointment_<?php echo $appointment_id; ?>">Complete</button>
                 </div>
             </form>
         </div>
