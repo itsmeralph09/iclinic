@@ -27,27 +27,50 @@
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     </div>
 
-  
                     <div class="row">
-                        <!--Total Pending Events Card -->
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="font-weight-bold text-info text-uppercase mb-1">
+                                                Hello, <span class=""><?= $_SESSION['fullname']; ?>!</span></div>
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800">Welcome to iClinic - PRMSU Candelaria Clinic Management System.</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-house-medical-flag text-info fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM events WHERE status = 'pending'";
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'STUDENT' AND apt.appointment_status = 'PENDING' AND apt.deleted = 0
+                                ";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_pending = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_pending = mysqli_num_rows($result);
                         ?>
-                        <!-- Earnings (Monthly) Card Example -->
+                        
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Pending Events</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "12"; ?></div>
+                                                Pending Student Appointments</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_pending ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-hourglass-start text-primary fa-2x"></i>
@@ -57,25 +80,30 @@
                             </div>
                         </div>
 
-                        <!--Total Ongoing Events Card -->
+                        
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM events WHERE status = 'started'";
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'STUDENT' AND apt.appointment_status = 'APPROVED' AND apt.deleted = 0
+                            ";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_started = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_started = mysqli_num_rows($result);
                         ?>
-                        <!-- Earnings (Monthly) Card Example -->
+                        
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Ongoing Events</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "12"; ?></div>
+                                                Approved Student Appointments</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_started ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-hourglass-half text-success fa-2x"></i>
@@ -85,27 +113,32 @@
                             </div>
                         </div>
 
-                        <!--Total Completed Events Card -->
+                        
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM events WHERE status = 'closed'";
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'STUDENT' AND apt.appointment_status = 'COMPLETED' AND apt.deleted = 0
+                            ";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_closed = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_closed = mysqli_num_rows($result);
                         ?>
-                        <!-- Earnings (Monthly) Card Example -->
+                        
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Completed Events
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Completed Student Appointment
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo "13" ; ?></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $total_closed ?></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,12 +153,12 @@
                         <!--Total User Card -->
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM users WHERE deleted = 0";
+                            $sql = "SELECT * FROM user_tbl WHERE role = 'STUDENT' AND deleted = 0";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_user = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_student = mysqli_num_rows($result);
                         ?>
                         <!-- Pending Requests Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -134,8 +167,141 @@
                                     <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                               Total Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "12"; ?></div>
+                                               Total Student Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_student ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-users fa-2x text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        
+                        <?php
+
+                            require '../db/dbconn.php';
+
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'EMPLOYEE' AND apt.appointment_status = 'PENDING' AND apt.deleted = 0
+                                ";
+
+                            $result = mysqli_query($con, $sql);
+                            $total_pending = mysqli_num_rows($result);
+                        ?>
+                        
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Pending Employee Appointments</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_pending ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-hourglass-start text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <?php
+
+                            require '../db/dbconn.php';
+
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'EMPLOYEE' AND apt.appointment_status = 'APPROVED' AND apt.deleted = 0
+                            ";
+
+                            $result = mysqli_query($con, $sql);
+                            $total_started = mysqli_num_rows($result);
+                        ?>
+                        
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Approved Employee Appointments</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_started ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-hourglass-half text-success fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <?php
+
+                            require '../db/dbconn.php';
+
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'EMPLOYEE' AND apt.appointment_status = 'COMPLETED' AND apt.deleted = 0
+                            ";
+
+                            $result = mysqli_query($con, $sql);
+                            $total_closed = mysqli_num_rows($result);
+                        ?>
+                        
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Completed Employee Appointment
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $total_closed ?></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-hourglass-end text-danger fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Total User Card -->
+                        <?php
+
+                            require '../db/dbconn.php';
+
+                            $sql = "SELECT * FROM user_tbl WHERE role = 'EMPLOYEE' AND deleted = 0";
+
+                            $result = mysqli_query($con, $sql);
+                            $total_student = mysqli_num_rows($result);
+                        ?>
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                               Total Employee Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_student ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-users fa-2x text-warning"></i>
