@@ -128,10 +128,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" name="edit" class="btn btn-primary" id="printAppointment_<?php echo $appointment_id; ?>">Print</button>
+                    <button type="submit" name="edit" class="btn btn-primary" id="printAppointment_<?php echo $appointment_id; ?>">Download Medcert</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-   

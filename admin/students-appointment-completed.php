@@ -132,9 +132,9 @@
                                             	<a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#vitalsview_<?php echo $appointment_id; ?>">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
-                                                <button class="btn btn-sm btn-success">
-                                                    <i class="fa-solid fa-print"></i>
-                                                </button>
+                                                <a class="btn btn-sm btn-success download-docx" data-id="<?php echo $appointment_id; ?>" data-no="<?php echo $appointment_no; ?>">
+                                                    <i class="fa-solid fa-download"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         <?php
@@ -187,84 +187,65 @@
         });
     </script>
 
-    <!-- Complete -->
     <script>
-        $(document).ready(function() {
-            // Function to show SweetAlert2 messages
-            const showSweetAlert = (icon, title, message) => {
+        $(document).ready(function(){
+             $('.download-docx').click(function(){
+                var appointmentId = $(this).data('id');
+                var appointmentNo = $(this).data('no');
+
+                // Show loading dialog using SweetAlert2
                 Swal.fire({
-                    icon: icon,
-                    title: title,
-                    text: message
-                });
-            };
-
-            // Delegate click event handling to a parent element
-            $(document).on('click', '[id^="completeAppointment_"]', function(e) {
-                e.preventDefault(); // Prevent default form submission
-                var userID = $(this).attr('id').split('_')[1]; // Extract event ID
-                var formData = $('#updateForm_' + userID); // Get the form data
-                var modalDiv = $('#vitals_' + userID);
-
-                let fieldsAreValid = true; // Initialize as true
-                // const requiredFields = formData.find('[required]'); // Select required fields
-                const requiredFields = modalDiv.find(':input[required]'); // Select required fields
-
-                // Remove existing error classes
-                $('.form-control').removeClass('is-invalid');
-
-                requiredFields.each(function() {
-                    // Check if the element is a select and it doesn't have a selected value
-                    if ($(this).is('select') && $(this).val() === null) {
-                        fieldsAreValid = false; // Set to false if any required select field doesn't have a value
-                        showSweetAlert('warning', 'Oops!', 'Please fill-up the required fields.');
-                        $(this).addClass('is-invalid'); // Add red border to missing field
-                    }
-                    // Check if the element is empty
-                    else if ($(this).val().trim() === '') {
-                        fieldsAreValid = false; // Set to false if any required field is empty or null
-                        showSweetAlert('warning', 'Oops!', 'Please fill-up the required fields.');
-                        $(this).addClass('is-invalid'); // Add red border to missing field
-                    } else {
-                        $(this).removeClass('is-invalid'); // Remove red border if field is filled
+                    title: 'Generating Document...',
+                    text: 'Please wait while the document is being generated.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();   
                     }
                 });
 
-                if (fieldsAreValid) {
-                    $.ajax({
-                        url: 'action/complete_appointment.php', // URL to submit the form data
-                        type: 'POST',
-                        data: formData.serialize(), // Form data to be submitted
-                        dataType: 'json',
-                        success: function(response) {
-                            // Handle the success response
-                            console.log(response); // Output response to console (for debugging)
-                            if (response.status === 'success') {
-                                Swal.fire(
-                                    'Success!',
-                                    response.message,
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Error!',
-                                    response.message,
-                                    'error'
-                                );
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle the error response
-                            console.error(xhr.responseText); // Output error response to console (for debugging)
-                            showSweetAlert('error', 'Error', 'Failed to complete appointment. Please try again later.');
-                        }
-                    });
-                }
+                // AJAX call to generate the document
+                $.ajax({
+                    url: 'action/generate_docx.php',
+                    method: 'POST',
+                    data: { appointment_id: appointmentId },
+                    xhrFields: {
+                        responseType: 'blob' // Important for file download
+                    },
+                    success: function(response){
+                        var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = "Appointment_" + appointmentNo + ".docx";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        // Close the loading dialog
+                        Swal.close();
+
+                        // Optionally, show a success message
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'The document has been generated and downloaded successfully.',
+                            icon: 'success'
+                        });
+                    },
+                    error: function(xhr, status, error){
+                        // Handle error
+                        Swal.close();
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while generating the document: ' + error,
+                            icon: 'error'
+                        });
+                    }
+                });
             });
         });
     </script>
+
 
 </body>
 
