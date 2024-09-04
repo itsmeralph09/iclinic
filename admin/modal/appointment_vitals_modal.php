@@ -67,7 +67,7 @@
                                         <label class="control-label modal-label" for="appointment_blood_pressure_<?php echo $appointment_id; ?>">Blood Pressure</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="appointment_blood_pressure_<?php echo $appointment_id; ?>" name="appointment_blood_pressure" value="" required>
+                                        <input type="text" class="form-control" id="appointment_blood_pressure_<?php echo $appointment_id; ?>" name="appointment_blood_pressure" value="" required>
                                         <div class="invalid-feedback">
                                             Please input a valid Blood Pressure
                                         </div>
