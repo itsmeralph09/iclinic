@@ -1,11 +1,10 @@
-                        
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include './include/head.php'; ?>
 
 <body id="page-top">
-    <div class="d-none" id="employees-approved"></div>
+    <div class="d-none" id="employees-declined"></div>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -25,7 +24,8 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Approved Employees</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Declined Employees</h1>
+                        <!-- <a href="deleted_users.php" class="btn btn-sm btn-info shadow-sm"><i class="fas fa-trash fa-sm"></i> Archived Users</a> -->
                     </div>
 
                     <!-- Content Row -->
@@ -35,7 +35,7 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">List of Approved Employees</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">List of Declined Employees</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -63,7 +63,7 @@
                                                 $display_users = "SELECT st.*, ut.user_id, ut.no, ut.email, ut.role, ut.status
                                                                     FROM employee_tbl st
                                                                     INNER JOIN user_tbl ut ON ut.user_id = st.user_id
-                                                                    WHERE ut.status = 'APPROVED' AND ut.deleted = 0
+                                                                    WHERE ut.status = 'DECLINED' AND ut.deleted = 0
                                                                     ";
                                                 $sqlQuery = mysqli_query($con, $display_users) or die(mysqli_error($con));
 
@@ -124,15 +124,14 @@
                                             <td class=""><?php echo $occupation; ?></td>
                                             <td class=""><?php echo $contact; ?></td>
                                             <td class=""><?php echo $status_text; ?></td>
-                                           
                                             <td class="text-center">
                                                 <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
-                                                <a href="#" class="btn btn-sm btn-danger delete-employee-btn"
-                                                   data-user-id="<?php echo $user_id; ?>" 
+                                                <a href="#" class="btn btn-sm btn-success approve-employee-btn"
+                                                   data-user-id="<?php echo $user_id; ?>"
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-no="<?php echo htmlspecialchars($employee_no); ?>"
                                                    data-user-occupation="<?php echo htmlspecialchars($occupation); ?>">
-                                                   <i class="fa-solid fa-trash"></i>
+                                                   <i class="fa-solid fa-check"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -185,32 +184,32 @@
         });
     </script>
 
-    <!-- Decline Employee Account Registration -->
+    <!-- Approve Employee Account Registration -->
     <script>
         $(document).ready(function() {
             // Function for deleting event
-            $('.delete-employee-btn').on('click', function(e) {
+            $('.approve-employee-btn').on('click', function(e) {
                 e.preventDefault();
-                var declineButton = $(this);
-                var userId = declineButton.data('user-id');
-                var userName = decodeURIComponent(declineButton.data('user-name'));
-                var userNo = decodeURIComponent(declineButton.data('user-no'));
-                var userOccupation = decodeURIComponent(declineButton.data('user-occupation'));
+                var approveButton = $(this);
+                var userId = approveButton.data('user-id');
+                var userName = decodeURIComponent(approveButton.data('user-name'));
+                var userNo = decodeURIComponent(approveButton.data('user-no'));
+                var userOccupation = decodeURIComponent(approveButton.data('user-occupation'));
                 Swal.fire({
-                    title: 'Delete Employee Account',
-                    html: "You are about to delete the following employee:<br><br>" +
+                    title: 'Approve Student Account Registration',
+                    html: "You are about to approve the following employee:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
                           "<strong>Employee No.:</strong> " + userNo + "<br>" +
                           "<strong>Occupation:</strong> " + userOccupation + "<br>",
-                    icon: 'warning',
+                    icon: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#d33',
+                    confirmButtonColor: '#1cc88a',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete!'
+                    confirmButtonText: 'Yes, approve!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'action/delete_employee.php', // Corrected 'file' to 'url'
+                            url: 'action/approve_employee.php',
                             type: 'POST',
                             data: {
                                 user_id: userId
@@ -218,8 +217,8 @@
                             success: function(response) {
                                 if (response.trim() === 'success') {
                                     Swal.fire(
-                                        'Deleted!',
-                                        'Employee has been deleted.',
+                                        'Approved!',
+                                        'Employee has been approved.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -227,7 +226,7 @@
                                 } else {
                                     Swal.fire(
                                         'Error!',
-                                        'Failed to delete employee.',
+                                        'Failed to approve employee.',
                                         'error'
                                     );
                                 }
@@ -236,7 +235,7 @@
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
-                                    'Failed to delete employee.',
+                                    'Failed to approve employee.',
                                     'error'
                                 );
                             }
