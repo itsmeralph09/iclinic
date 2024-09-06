@@ -92,7 +92,7 @@
             </div>
 
             <!-- Nav Item - Admin Collapse Menu -->
-            <li class="nav-item">
+<!--             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#appointmentCollapse"
                     aria-expanded="true" aria-controls="appointmentCollapse">
                     <i class="fas fa-fw fa-calendar"></i>
@@ -101,13 +101,38 @@
                 <div id="appointmentCollapse" class="collapse" aria-labelledby=""
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Students Appointments</h6>
+                        <h6 class="collapse-header">Student Appointments</h6>
                         <a class="collapse-item" href="students-appointment-pending.php">Pending</a>
                         <a class="collapse-item" href="students-appointment-approved.php">Approved</a>
                         <a class="collapse-item" href="students-appointment-completed.php">Completed</a>
-                        <a class="collapse-item" href="">Declined</a>
+                        <a class="collapse-item" href="students-appointment-declined.php">Declined</a>
                     </div>
                 </div>
+            </li> -->
+
+            <!-- Nav Item - Student Pending Appointments -->
+            <li class="nav-item">
+                <a class="nav-link" href="students-appointment-pending.php">
+                    <i class="fa-regular fa-fw fa-calendar"></i>
+                    <span>Pending</span></a>
+            </li>
+            <!-- Nav Item - Student Approved Appointments -->
+            <li class="nav-item">
+                <a class="nav-link" href="students-appointment-approved.php">
+                    <i class="fa-regular fa-fw fa-calendar-check"></i>
+                    <span>Approved</span></a>
+            </li>
+            <!-- Nav Item - Student Completed Appointments -->
+            <li class="nav-item">
+                <a class="nav-link" href="students-appointment-completed.php">
+                   <i class="fa-solid fa-fw fa-calendar-check"></i>
+                    <span>Completed</span></a>
+            </li>
+            <!-- Nav Item - Student Declined Appointments -->
+            <li class="nav-item">
+                <a class="nav-link" href="students-appointment-declined.php">
+                    <i class="fa-regular fa-fw fa-calendar-xmark"></i>
+                    <span>Declined</span></a>
             </li>
 
             <!-- Divider -->
