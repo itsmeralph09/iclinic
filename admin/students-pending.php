@@ -117,8 +117,10 @@
                                                     $status = $row['status'];
                                                     if ($status == 'PENDING') {
                                                         $status_text = "<p class='badge-warning text-center rounded-pill'>PENDING</p>";
-                                                    } else {
+                                                    } elseif ($status == "APPROVED") {
                                                         $status_text = "<p class='badge-success text-center rounded-pill'>APPROVED</p>";
+                                                    } elseif ($status == "DECLINED") {
+                                                        $status_text = "<p class='badge-danger text-center rounded-pill'>DECLINED</p>";
                                                     }
                                                    
                                                     $full_name = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] . '' . $suffix;

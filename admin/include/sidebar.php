@@ -41,8 +41,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Students</h6>
                         <a class="collapse-item" href="students-pending.php">Pending</a>
-                        <a class="collapse-item" href="students-declined.php">Declined</a>
                         <a class="collapse-item" href="students-approved.php">Approved</a>
+                        <a class="collapse-item" href="students-declined.php">Declined</a>
                         <a class="collapse-item" href="students-archived.php">Archived</a>
                     </div>
                 </div>
@@ -60,8 +60,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Employees</h6>
                         <a class="collapse-item" href="employees-pending.php">Pending</a>
-                        <a class="collapse-item" href="employees-declined.php">Declined</a>
                         <a class="collapse-item" href="employees-approved.php">Approved</a>
+                        <a class="collapse-item" href="employees-declined.php">Declined</a>
                         <a class="collapse-item" href="employees-archived.php">Archived</a>
                     </div>
                 </div>

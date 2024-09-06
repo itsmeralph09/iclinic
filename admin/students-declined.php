@@ -49,6 +49,7 @@
                                                     <th scope="col">Name</th>                                               
                                                     <th scope="col">Course & Year</th>                                             
                                                     <th scope="col">Contact Info</th>                                           
+                                                    <th scope="col">Account Status</th>                                           
                                                     <th scope="col">Action</th>                             
                                                    
                                                 </tr>
@@ -116,8 +117,10 @@
                                                     $status = $row['status'];
                                                     if ($status == 'PENDING') {
                                                         $status_text = "<p class='badge-warning text-center rounded-pill'>PENDING</p>";
-                                                    } else {
+                                                    } elseif ($status == "APPROVED") {
                                                         $status_text = "<p class='badge-success text-center rounded-pill'>APPROVED</p>";
+                                                    } elseif ($status == "DECLINED") {
+                                                        $status_text = "<p class='badge-danger text-center rounded-pill'>DECLINED</p>";
                                                     }
                                                    
                                                     $full_name = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] . '' . $suffix;
@@ -130,6 +133,7 @@
                                             <td class=""><?php echo $full_name; ?></td>
                                             <td class=""><?php echo $course; ?> - <?php echo $year; ?></td>
                                             <td class=""><?php echo $contact; ?></td>
+                                            <td class=""><?php echo $status_text; ?></td>
                                             <td class="text-center">
                                                 <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
                                                 <a href="#" class="btn btn-sm btn-success approve-student-btn"
