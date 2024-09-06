@@ -105,8 +105,8 @@
                         <h6 class="collapse-header">Student Appointments</h6>
                         <a class="collapse-item" href="students-appointment-pending.php"><i class="fa-regular fa-fw fa-calendar mr-1"></i>Pending</a>
                         <a class="collapse-item" href="students-appointment-approved.php"><i class="fa-regular fa-fw fa-calendar-check mr-1"></i>Approved</a>
-                        <a class="collapse-item" href="students-appointment-completed.php"><i class="fa-solid fa-fw fa-calendar-check mr-1"></i>Completed</a>
                         <a class="collapse-item" href="students-appointment-declined.php"><i class="fa-regular fa-fw fa-calendar-xmark mr-1"></i>Declined</a>
+                        <a class="collapse-item" href="students-appointment-completed.php"><i class="fa-solid fa-fw fa-calendar-check mr-1"></i>Completed</a>
                     </div>
                 </div>
             </li>
