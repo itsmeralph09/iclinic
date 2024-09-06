@@ -4,7 +4,7 @@
 <?php include './include/head.php'; ?>
 
 <body id="page-top">
-    <div class="d-none" id="students-appointment-pending"></div>
+    <div class="d-none" id="students-appointment-completed"></div>
 
     <!-- Page Wrapper -->
     <div id="wrapper">

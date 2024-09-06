@@ -18,7 +18,17 @@
             var currentPage = $('div[id]').attr('id');
 
             // Add the .active class to the corresponding navigation item
-            $('#accordionSidebar').find('a[href="' + currentPage + '.php"]').closest('li').addClass('active');
+            var activeItem = $('#accordionSidebar').find('a[href="' + currentPage + '.php"]');
+            activeItem.closest('li').addClass('active');
+            activeItem.closest('a').addClass('active');
+
+            // If the item is inside a collapsible menu, open the menu
+            if (activeItem.closest('.collapse').length) {
+                var collapseItem = activeItem.closest('.collapse');
+                collapseItem.addClass('show'); // Open the collapse
+                collapseItem.prev('a').removeClass('collapsed'); // Remove the collapsed class from the parent link
+                collapseItem.prev('a').addClass('active'); // Add active class to the parent link
+            }
         });
     </script>
     <script>
