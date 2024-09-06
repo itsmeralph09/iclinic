@@ -59,9 +59,10 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Employees</h6>
-                        <a class="collapse-item" href="">Pending</a>
-                        <a class="collapse-item" href="">Approved</a>
-                        <a class="collapse-item" href="">Archived</a>
+                        <a class="collapse-item" href="employees-pending.php">Pending</a>
+                        <a class="collapse-item" href="employees-declined.php">Declined</a>
+                        <a class="collapse-item" href="employees-approved.php">Approved</a>
+                        <a class="collapse-item" href="employees-archived.php">Archived</a>
                     </div>
                 </div>
             </li>
