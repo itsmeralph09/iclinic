@@ -63,7 +63,7 @@
                                 <p class="text-primary">Profile</p>
                                 <div class="row mb-3">
                                     <div class="col-12 d-flex justify-content-center align-items-center">
-                                         <div class="image-preview-container" style="width: 160px; height: 160px; border-radius: 50%; overflow: hidden;">
+                                         <div class="image-preview-container" style="width: 180px; height: 180px; border-radius: 5px; overflow: hidden;">
                                             <img class="img-fluid rounded" id="profilePreview_<?php echo $user_id; ?>" src="../img/profiles/<?php echo $profile; ?>" alt="Profile Picture Preview" style="width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                     </div>

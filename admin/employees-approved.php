@@ -127,6 +127,13 @@
                                            
                                             <td class="text-center">
                                                 <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-info reset-employee-btn"
+                                                   data-user-id="<?php echo $user_id; ?>" 
+                                                   data-user-name="<?php echo htmlspecialchars($full_name); ?>"
+                                                   data-user-no="<?php echo htmlspecialchars($employee_no); ?>"
+                                                   data-user-occupation="<?php echo htmlspecialchars($occupation); ?>">
+                                                   <i class="fa-solid fa-key"></i>
+                                                </a>
                                                 <a href="#" class="btn btn-sm btn-danger delete-employee-btn"
                                                    data-user-id="<?php echo $user_id; ?>" 
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
@@ -239,6 +246,97 @@
                                     'Failed to delete employee.',
                                     'error'
                                 );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Reset Student Password -->
+    <script>
+        $(document).ready(function() {
+            // Function for resetting password
+            $('.reset-employee-btn').on('click', function(e) {
+                e.preventDefault();
+                var resetButton = $(this);
+                var userId = resetButton.data('user-id');
+                var userName = decodeURIComponent(resetButton.data('user-name'));
+                var userNo = decodeURIComponent(resetButton.data('user-no'));
+                var userOccupation = decodeURIComponent(resetButton.data('user-occupation'));
+
+                // SweetAlert2 form for password reset
+                Swal.fire({
+                    title: 'Reset Password',
+                    html:
+                        "<p>You are about to reset the password for the following employee:</p>" +
+                        "<strong>Name:</strong> " + userName + "<br>" +
+                        "<strong>Employee No.:</strong> " + userNo + "<br>" +
+                        "<strong>Occupation:</strong> " + userOccupation + "<br><br>" +
+                        '<input type="password" id="newPassword" class="swal2-input" placeholder="New Password">' +
+                        '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Reset Password',
+                    allowOutsideClick: false, // Disable outside click
+                    preConfirm: () => {
+                        const newPassword = Swal.getPopup().querySelector('#newPassword').value;
+                        const confirmPassword = Swal.getPopup().querySelector('#confirmPassword').value;
+                        if (!newPassword || !confirmPassword) {
+                            Swal.showValidationMessage(`Please enter both password fields`);
+                        } else if (newPassword !== confirmPassword) {
+                            Swal.showValidationMessage(`Passwords do not match`);
+                        }
+                        return { newPassword: newPassword };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var newPassword = result.value.newPassword;
+
+                        // Show an additional confirmation step
+                        Swal.fire({
+                            title: 'Confirm Password Reset',
+                            text: "Are you sure you want to reset this employee's password?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, reset it!',
+                            cancelButtonText: 'Cancel',
+                            allowOutsideClick: false // Disable outside click
+                        }).then((confirmResult) => {
+                            if (confirmResult.isConfirmed) {
+                                // Perform AJAX request to update the password in the backend
+                                $.ajax({
+                                    url: 'action/reset_password.php', // Backend script to handle password reset
+                                    type: 'POST',
+                                    data: {
+                                        user_id: userId,
+                                        password: newPassword
+                                    },
+                                    success: function(response) {
+                                        if (response.trim() === 'success') {
+                                            Swal.fire(
+                                                'Password Reset!',
+                                                'The password has been reset successfully.',
+                                                'success'
+                                            );
+                                        } else {
+                                            Swal.fire(
+                                                'Error!',
+                                                'Failed to reset password.',
+                                                'error'
+                                            );
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(xhr.responseText);
+                                        Swal.fire(
+                                            'Error!',
+                                            'Failed to reset password.',
+                                            'error'
+                                        );
+                                    }
+                                });
                             }
                         });
                     }
