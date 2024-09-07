@@ -26,6 +26,52 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
+                Manage Appointments
+            </div>
+
+            <!-- Nav Item - Admin Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#appointmentCollapse"
+                    aria-expanded="true" aria-controls="appointmentCollapse">
+                    <i class="fas fa-fw fa-calendar"></i>
+                    <span>Student Appointment</span>
+                </a>
+                <div id="appointmentCollapse" class="collapse" aria-labelledby=""
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Student Appointments</h6>
+                        <a class="collapse-item" href="students-appointment-pending.php"><i class="fa-regular fa-fw fa-calendar mr-1"></i>Pending</a>
+                        <a class="collapse-item" href="students-appointment-approved.php"><i class="fa-regular fa-fw fa-calendar-check mr-1"></i>Approved</a>
+                        <a class="collapse-item" href="students-appointment-declined.php"><i class="fa-regular fa-fw fa-calendar-xmark mr-1"></i>Declined</a>
+                        <a class="collapse-item" href="students-appointment-completed.php"><i class="fa-solid fa-fw fa-calendar-check mr-1"></i>Completed</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Admin Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#appointmentCollapseEmployee"
+                    aria-expanded="true" aria-controls="appointmentCollapse">
+                    <i class="fas fa-fw fa-calendar"></i>
+                    <span>Employee Appointment</span>
+                </a>
+                <div id="appointmentCollapseEmployee" class="collapse" aria-labelledby=""
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Employee Appointments</h6>
+                        <a class="collapse-item" href="employees-appointment-pending.php"><i class="fa-regular fa-fw fa-calendar mr-1"></i>Pending</a>
+                        <a class="collapse-item" href="employees-appointment-approved.php"><i class="fa-regular fa-fw fa-calendar-check mr-1"></i>Approved</a>
+                        <a class="collapse-item" href="employees-appointment-declined.php"><i class="fa-regular fa-fw fa-calendar-xmark mr-1"></i>Declined</a>
+                        <a class="collapse-item" href="employees-appointment-completed.php"><i class="fa-solid fa-fw fa-calendar-check mr-1"></i>Completed</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
                 Manage Users
             </div>
 
@@ -86,33 +132,6 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Manage Appointments
-            </div>
-
-            <!-- Nav Item - Admin Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#appointmentCollapse"
-                    aria-expanded="true" aria-controls="appointmentCollapse">
-                    <i class="fas fa-fw fa-calendar"></i>
-                    <span>Student Appointments</span>
-                </a>
-                <div id="appointmentCollapse" class="collapse" aria-labelledby=""
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Student Appointments</h6>
-                        <a class="collapse-item" href="students-appointment-pending.php"><i class="fa-regular fa-fw fa-calendar mr-1"></i>Pending</a>
-                        <a class="collapse-item" href="students-appointment-approved.php"><i class="fa-regular fa-fw fa-calendar-check mr-1"></i>Approved</a>
-                        <a class="collapse-item" href="students-appointment-declined.php"><i class="fa-regular fa-fw fa-calendar-xmark mr-1"></i>Declined</a>
-                        <a class="collapse-item" href="students-appointment-completed.php"><i class="fa-solid fa-fw fa-calendar-check mr-1"></i>Completed</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
