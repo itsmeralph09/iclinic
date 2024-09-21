@@ -10,7 +10,15 @@ if (isset($_POST['appointment_id'])) {
     $query = "
         SELECT 
             ut.no AS student_number,
-            CONCAT(st.first_name, ' ', st.middle_name, ' ', st.last_name, ' ', st.suffix_name) AS fullname,
+            CONCAT(st.first_name, ' ', 
+               IF(st.middle_name IS NOT NULL AND st.middle_name != '', 
+                  CONCAT(SUBSTRING(st.middle_name, 1, 1), '. '), 
+                  ''), 
+               st.last_name, 
+               CASE 
+                   WHEN st.suffix_name = 'NA' THEN ''
+                   ELSE CONCAT(' ', st.suffix_name) 
+               END) AS fullname,
             st.profile as student_photo,
             st.birthdate AS student_birthdate,
             st.age AS student_age,
@@ -101,8 +109,8 @@ if (isset($_POST['appointment_id'])) {
                 }
                 .picture-box {
                     border: 1px solid black;
-                    width: 195px; /* Adjust width */
-                    height: 195px; /* Adjust height */
+                    width: 196px; /* Adjust width */
+                    height: 196px; /* Adjust height */
                     margin-left: 20px; /* Space from text */
                     display: flex;
                     justify-content: center;
@@ -111,9 +119,11 @@ if (isset($_POST['appointment_id'])) {
                     text-align: center;
                     overflow: hidden;
                 }
-                .student-photo{
-                    width: auto;
-                    height: 192px;
+
+                .student-photo {
+                    max-width: 192px; /* Prevents overflow */
+                    max-height: auto; /* Prevents overflow */
+                    object-fit: cover; /* Maintains aspect ratio */
                 }
             </style>
         </head>
@@ -165,7 +175,7 @@ if (isset($_POST['appointment_id'])) {
                         <p><strong>Appointment No.:</strong> <span class='underline'>{$appointment['student_appointment_no']}</span></p>
                         <br>
                         <p><strong>Signature of Student: _______________________________</strong></p>
-                        <p><strong>Signature of University Physician: ____________________</strong></p>                    
+                        <p><strong>Signature of University Physician: ______________________</strong></p>                   
                     </div>
                     <div class='picture-box'>
                         <img class='student-photo' src='../img/profiles/{$appointment['student_photo']}' alt='Student Photo'>

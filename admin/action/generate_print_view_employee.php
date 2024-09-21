@@ -88,8 +88,8 @@ if (isset($_POST['appointment_id'])) {
                 }
                 .picture-box {
                     border: 1px solid black;
-                    width: 195px; /* Adjust width */
-                    height: 195px; /* Adjust height */
+                    width: 196px; /* Adjust width */
+                    height: 196px; /* Adjust height */
                     margin-left: 20px; /* Space from text */
                     display: flex;
                     justify-content: center;
@@ -98,9 +98,11 @@ if (isset($_POST['appointment_id'])) {
                     text-align: center;
                     overflow: hidden;
                 }
-                .employee-photo{
-                    width: auto;
-                    height: 192px;
+
+                .employee-photo {
+                    max-width: 192px; /* Prevents overflow */
+                    max-height: auto; /* Prevents overflow */
+                    object-fit: cover; /* Maintains aspect ratio */
                 }
             </style>
         </head>
