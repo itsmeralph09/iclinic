@@ -131,8 +131,8 @@
                                             	<a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#vitalsview_<?php echo $appointment_id; ?>">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
-                                                <a class="btn btn-sm btn-success download-docx" data-id="<?php echo $appointment_id; ?>" data-no="<?php echo $appointment_no; ?>">
-                                                    <i class="fa-solid fa-download"></i>
+                                                <a class="btn btn-sm btn-success print-docx" data-id="<?php echo $appointment_id; ?>" data-no="<?php echo $appointment_no; ?>">
+                                                    <i class="fa-solid fa-print"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php // include('modal/appointment_add_modal.php'); ?>
+
                     </div>
                     
                 </div>
@@ -186,65 +186,65 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function(){
-             $('.download-docx').click(function(){
-                var appointmentId = $(this).data('id');
-                var appointmentNo = $(this).data('no');
+        <script>
+$(document).ready(function() {
+    $('.print-docx').click(function() {
+        var appointmentId = $(this).data('id');
 
-                // Show loading dialog using SweetAlert2
-                Swal.fire({
-                    title: 'Generating Document...',
-                    text: 'Please wait while the document is being generated.',
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();   
-                    }
-                });
+        // Show loading dialog using SweetAlert2
+        Swal.fire({
+            title: 'Preparing Document...',
+            text: 'Please wait while the document is being prepared for print.',
+            icon: 'info',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
-                // AJAX call to generate the document
-                $.ajax({
-                    url: 'action/generate_docx.php',
-                    method: 'POST',
-                    data: { appointment_id: appointmentId },
-                    xhrFields: {
-                        responseType: 'blob' // Important for file download
-                    },
-                    success: function(response){
-                        var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-                        var link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = "Appointment_" + appointmentNo + ".docx";
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+        // AJAX call to get the document content
+        $.ajax({
+            url: 'action/generate_print_view_employee.php', // Adjusted to point to the new PHP script
+            method: 'POST',
+            data: { appointment_id: appointmentId },
+            success: function(response) {
+                // Add a 1-second delay before switching to the new tab
+                setTimeout(function() {
+                    // Open the response in a new window for printing
+                    var printWindow = window.open('', '_blank');
+                    printWindow.document.write(response);
+                    printWindow.document.close();
 
-                        // Close the loading dialog
+                    // Wait for the new window to load
+                    printWindow.onload = function() {
+                        // Now that the content is loaded, we can print
+                        printWindow.focus();
+                        printWindow.print();
                         Swal.close();
 
-                        // Optionally, show a success message
+                        // Show a success message
                         Swal.fire({
                             title: 'Success!',
-                            text: 'The document has been generated and downloaded successfully.',
+                            text: 'The document is ready for printing.',
                             icon: 'success'
                         });
-                    },
-                    error: function(xhr, status, error){
-                        // Handle error
-                        Swal.close();
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'An error occurred while generating the document: ' + error,
-                            icon: 'error'
-                        });
-                    }
+                    };
+                }, 1000); // 1000 milliseconds = 1 second
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                Swal.close();
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while preparing the document for print: ' + error,
+                    icon: 'error'
                 });
-            });
+            }
         });
-    </script>
-
+    });
+});
+</script>
 
 </body>
 

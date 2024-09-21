@@ -128,7 +128,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" name="edit" class="btn btn-primary" id="printAppointment_<?php echo $appointment_id; ?>">Download Medcert</button>
+                    <a class="btn btn-success print-docx" data-id="<?php echo $appointment_id; ?>" data-no="<?php echo $appointment_no; ?>">
+                        <i class="fa-solid fa-print"></i> Print
+                    </a>
                 </div>
             </form>
         </div>
