@@ -149,8 +149,8 @@
                                  <div class="form-floating">
                                    <select name="course" class="form-control form-select" id="course">
                                        <option value="" disabled selected>Select course</option>
-                                       <option value="bsit">Bachelor of Science in Information Technology</option>
-                                       <option value="bsf">Bachelor of Science in Fisheries</option>
+                                       <option value="BSIT">Bachelor of Science in Information Technology</option>
+                                       <option value="BSFi">Bachelor of Science in Fisheries</option>
                                     </select>
                                     <label for="course">Course</label>
                                  </div>

@@ -50,7 +50,7 @@
 
         if ($classification == "STUDENT") {
             $student_number = mysqli_real_escape_string($con, $_POST['student_number']);
-            $course = strtoupper(mysqli_real_escape_string($con, $_POST['course']));
+            $course = mysqli_real_escape_string($con, $_POST['course']);
             $year_level = mysqli_real_escape_string($con, $_POST['year_level']);
         } elseif ($classification == "EMPLOYEE") {
             $employee_number = mysqli_real_escape_string($con, $_POST['employee_number']);
