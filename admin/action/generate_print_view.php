@@ -11,6 +11,7 @@ if (isset($_POST['appointment_id'])) {
         SELECT 
             ut.no AS student_number,
             CONCAT(st.first_name, ' ', st.middle_name, ' ', st.last_name, ' ', st.suffix_name) AS fullname,
+            st.profile as student_photo,
             st.birthdate AS student_birthdate,
             st.age AS student_age,
             st.sex AS student_sex,
@@ -100,14 +101,19 @@ if (isset($_POST['appointment_id'])) {
                 }
                 .picture-box {
                     border: 1px solid black;
-                    width: 192px; /* Adjust width */
-                    height: 192px; /* Adjust height */
+                    width: 195px; /* Adjust width */
+                    height: 195px; /* Adjust height */
                     margin-left: 20px; /* Space from text */
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     font-size: 14px;
                     text-align: center;
+                    overflow: hidden;
+                }
+                .student-photo{
+                    width: auto;
+                    height: 192px;
                 }
             </style>
         </head>
@@ -162,8 +168,7 @@ if (isset($_POST['appointment_id'])) {
                         <p><strong>Signature of University Physician: ____________________</strong></p>                    
                     </div>
                     <div class='picture-box'>
-                        <p>2x2 Picture</p>
-                        <!-- You can add an <img> tag here if you have a specific image -->
+                        <img class='student-photo' src='../img/profiles/{$appointment['student_photo']}' alt='Student Photo'>
                     </div>
                 </div>
             </div>
