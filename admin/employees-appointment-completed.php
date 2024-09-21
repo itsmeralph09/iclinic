@@ -4,7 +4,7 @@
 <?php include './include/head.php'; ?>
 
 <body id="page-top">
-    <div class="d-none" id="students-appointment-completed"></div>
+    <div class="d-none" id="employees-appointment-completed"></div>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -24,7 +24,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Student Completed Appointments</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Employee Completed Appointments</h1>
                         
                     </div>
 
@@ -36,11 +36,10 @@
                                 <!-- Card Header -->
 								<div class="card-header py-3 d-flex flex-column flex-md-row">
 								    <div class="col-12 col-md-6 d-flex align-items-center justify-content-start mx-0 px-0 mb-2 mb-md-0">
-								        <h6 class="font-weight-bold text-primary mb-0">List of Student Completed Appointments</h6>
+								        <h6 class="font-weight-bold text-primary mb-0">List of Employee Completed Appointments</h6>
 								    </div>
 								    <div class="col-12 col-md-6 d-flex align-items-center justify-content-end mx-0 px-0">
 								    	<div class="col-12 col-md-4 float-right mx-0 px-0">
-								        	<!-- <a data-toggle="modal" data-target="#addNew" class="btn btn-success shadow-sm w-100 h-100"><i class="fa-solid fa-plus mr-1"></i>New Appointment</a> -->
 								        </div>
 								    </div>
 								</div>
@@ -54,7 +53,7 @@
                                                   
                                                     <th scope="col">#</th>                                        
                                                     <th scope="col">Name</th>                                        
-                                                    <th scope="col">Course & Year</th>                                        
+                                                    <th scope="col">Occupation</th>                                        
                                                     <th scope="col">Appointment No.</th>                                        
                                                     <th scope="col">Appointment Description</th>                                               
                                                     <th scope="col">Appointment Date</th>                                               
@@ -71,12 +70,12 @@
                                                 require '../db/dbconn.php';
 
                                                 $display_appointments = "
-                                                					SELECT apt.*, CONCAT(st.last_name, ', ', st.first_name, ' ', st.suffix_name) as fullname, CONCAT(st.course, ' ', st.year_level) as course_year, avt.blood_pressure, avt.temperature, avt.weight, avt.height, avt.diagnosis, avt.date_completed
+                                                					SELECT apt.*, CONCAT(st.last_name, ', ', st.first_name, ' ', st.suffix_name) as fullname, st.occupation, avt.blood_pressure, avt.temperature, avt.weight, avt.height, avt.diagnosis, avt.date_completed
                                                                     FROM appointment_tbl apt
                                                                     INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
-                                                                    INNER JOIN student_tbl st ON st.user_id = ut.user_id
+                                                                    INNER JOIN employee_tbl st ON st.user_id = ut.user_id
                                                                     INNER JOIN appointment_vitals_tbl avt ON avt.appointment_id = apt.appointment_id
-                                                                    WHERE apt.deleted = 0 AND ut.role = 'STUDENT' AND apt.appointment_status = 'COMPLETED'
+                                                                    WHERE apt.deleted = 0 AND ut.role = 'EMPLOYEE' AND apt.appointment_status = 'COMPLETED'
                                                 					";
                                                 $sqlQuery = mysqli_query($con, $display_appointments) or die(mysqli_error($con));
 
@@ -90,7 +89,7 @@
                                                     $appointment_date = $row['appointment_date'];
                                                     $appointment_status = $row['appointment_status'];
                                                     $fullname = $row['fullname'];
-                                                    $course_year = $row['course_year'];
+                                                    $occupation = $row['occupation'];
 
                                                     // Format the appointment date
                                                     $formatted_date = date('M d, Y', strtotime($appointment_date));
@@ -122,7 +121,7 @@
                                         <tr>         
                                             <td class=""><?php echo $counter; ?></td>
                                             <td class=""><?php echo $fullname; ?></td>
-                                            <td class=""><?php echo $course_year; ?></td>
+                                            <td class=""><?php echo $occupation; ?></td>
                                             <td class=""><?php echo $appointment_no; ?></td>
                                             <td class=""><?php echo $appointment_description_text; ?></td>
                                             <td class=""><?php echo $formatted_date; ?></td>
@@ -132,14 +131,14 @@
                                             	<a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#vitalsview_<?php echo $appointment_id; ?>">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
-                                                <a class="btn btn-sm btn-success print-docx" data-id="<?php echo $appointment_id; ?>" data-no="<?php echo $appointment_no; ?>">
-                                                    <i class="fa-solid fa-print"></i>
+                                                <a class="btn btn-sm btn-success download-docx" data-id="<?php echo $appointment_id; ?>" data-no="<?php echo $appointment_no; ?>">
+                                                    <i class="fa-solid fa-download"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                         <?php
                                             $counter++;
-                                            include('modal/appointment_vitalsview_modal.php');
+                                            include('modal/appointment_employee_vitalsview_modal.php');
                                         } 
                                         ?>
                                         </tbody>
@@ -149,7 +148,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <?php // include('modal/appointment_add_modal.php'); ?>
                     </div>
                     
                 </div>
@@ -188,65 +187,63 @@
     </script>
 
     <script>
-$(document).ready(function() {
-    $('.print-docx').click(function() {
-        var appointmentId = $(this).data('id');
+        $(document).ready(function(){
+             $('.download-docx').click(function(){
+                var appointmentId = $(this).data('id');
+                var appointmentNo = $(this).data('no');
 
-        // Show loading dialog using SweetAlert2
-        Swal.fire({
-            title: 'Preparing Document...',
-            text: 'Please wait while the document is being prepared for print.',
-            icon: 'info',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {
-                Swal.showLoading();
-            }
-        });
+                // Show loading dialog using SweetAlert2
+                Swal.fire({
+                    title: 'Generating Document...',
+                    text: 'Please wait while the document is being generated.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();   
+                    }
+                });
 
-        // AJAX call to get the document content
-        $.ajax({
-            url: 'action/generate_print_view.php', // Adjusted to point to the new PHP script
-            method: 'POST',
-            data: { appointment_id: appointmentId },
-            success: function(response) {
-                // Add a 1-second delay before switching to the new tab
-                setTimeout(function() {
-                    // Open the response in a new window for printing
-                    var printWindow = window.open('', '_blank');
-                    printWindow.document.write(response);
-                    printWindow.document.close();
+                // AJAX call to generate the document
+                $.ajax({
+                    url: 'action/generate_docx.php',
+                    method: 'POST',
+                    data: { appointment_id: appointmentId },
+                    xhrFields: {
+                        responseType: 'blob' // Important for file download
+                    },
+                    success: function(response){
+                        var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = "Appointment_" + appointmentNo + ".docx";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
 
-                    // Wait for the new window to load
-                    printWindow.onload = function() {
-                        // Now that the content is loaded, we can print
-                        printWindow.focus();
-                        printWindow.print();
+                        // Close the loading dialog
                         Swal.close();
 
-                        // Show a success message
+                        // Optionally, show a success message
                         Swal.fire({
                             title: 'Success!',
-                            text: 'The document is ready for printing.',
+                            text: 'The document has been generated and downloaded successfully.',
                             icon: 'success'
                         });
-                    };
-                }, 1000); // 1000 milliseconds = 1 second
-            },
-            error: function(xhr, status, error) {
-                // Handle error
-                Swal.close();
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'An error occurred while preparing the document for print: ' + error,
-                    icon: 'error'
+                    },
+                    error: function(xhr, status, error){
+                        // Handle error
+                        Swal.close();
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while generating the document: ' + error,
+                            icon: 'error'
+                        });
+                    }
                 });
-            }
+            });
         });
-    });
-});
-</script>
-
+    </script>
 
 
 </body>
