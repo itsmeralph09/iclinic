@@ -71,7 +71,14 @@
                                                 require '../db/dbconn.php';
 
                                                 $display_appointments = "
-                                                					SELECT apt.*, CONCAT(st.last_name, ', ', st.first_name, ' ', st.suffix_name) as fullname, CONCAT(st.course, ' ', st.year_level) as course_year
+                                                					SELECT apt.*, CONCAT(st.last_name, ', ', st.first_name, ' ', st.suffix_name) as fullname, CONCAT(st.course, ' - ', 
+                                                                              CASE 
+                                                                                 WHEN st.year_level = 1 THEN '1st Year'
+                                                                                 WHEN st.year_level = 2 THEN '2nd Year'
+                                                                                 WHEN st.year_level = 3 THEN '3rd Year'
+                                                                                 WHEN st.year_level = 4 THEN '4th Year'
+                                                                                 ELSE CONCAT(st.year_level, 'th Year')
+                                                                              END) AS course_year
 																	FROM appointment_tbl apt
 																	INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
 																	INNER JOIN student_tbl st ON st.user_id = ut.user_id
