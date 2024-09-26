@@ -322,7 +322,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Completed Events Overview</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Clinic Appointments Overview</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -351,10 +351,9 @@
                         <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Completed Events</h6>
-                                    <!-- <div class="dropdown no-arrow">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Monthly Clinic Appointments Overview</h6>
+                                    <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -367,23 +366,25 @@
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Something else here</a>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
+                                        <canvas id="myPolarAreaChart"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
-                                            Completed events of each Host Office this month
-                                        </span>
-                                        <!-- <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
+                                            <i class="fas fa-circle text-success"></i> Student
                                         </span>
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span> -->
+                                            <i class="fas fa-circle text-info"></i> Employee
+                                        </span>
+                                    </div>
+                                    <div class="mt-3 text-center small">
+                                        <span class="">
+                                            Clinic Appointment Distribution for this Month
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -429,7 +430,7 @@
     <script src="../vendor/chart.js/Chart.min.js"></script>
 
     <!-- <script src="../js/demo/chart-area-demo.js"></script> -->
-    <!-- <script>
+    <script>
         $(document).ready(function() {
             // Set new default font family and font color to mimic Bootstrap's default styling
             Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -463,7 +464,7 @@
 
             // AJAX request to fetch data from PHP script
             $.ajax({
-                url: 'action/fetch_completed_events.php', // Replace 'your_php_script.php' with the actual path to your PHP script
+                url: 'action/fetch_completed_appointments.php', // Replace 'fetch_completed_appointments.php' with the actual path to your PHP script
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -471,8 +472,8 @@
                     var labels = data.map(function(item) {
                         return item.month;
                     });
-                    var eventData = data.map(function(item) {
-                        return item.completed_events;
+                    var appointmentData = data.map(function(item) {
+                        return item.completed_appointments;
                     });
 
                     // Area Chart Example
@@ -482,9 +483,9 @@
                         data: {
                             labels: labels,
                             datasets: [{
-                                label: "Completed Events",
+                                label: "Completed Appointments",
                                 lineTension: 0.3,
-                                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                backgroundColor: "rgba(78, 115, 223, 0.5)",
                                 borderColor: "rgba(78, 115, 223, 1)",
                                 pointRadius: 3,
                                 pointBackgroundColor: "rgba(78, 115, 223, 1)",
@@ -494,7 +495,7 @@
                                 pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                                 pointHitRadius: 10,
                                 pointBorderWidth: 2,
-                                data: eventData,
+                                data: appointmentData,
                             }],
                         },
                         options: {
@@ -561,36 +562,35 @@
                     // Handle the error
                 }
             });
-        }); 
-    </script> -->
+        });
+    </script>
 
     <!-- <script src="../js/demo/chart-pie-demo.js"></script> -->
-    <!-- <script>
+    <script>
         $(document).ready(function() {
             // Set new default font family and font color to mimic Bootstrap's default styling
             Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
             Chart.defaults.global.defaultFontColor = '#858796';
 
-            // Function to fetch data using AJAX
-            function fetchData() {
-                // Make an AJAX request to your PHP script
+            // Function to fetch appointment distribution
+            function fetchAppointmentDistribution() {
                 $.ajax({
-                    url: 'action/fetch_completed_events_per_host.php',
+                    url: 'action/fetch_appointment_distribution.php',
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
-                        // Check if data is received successfully
                         if (response && response.length > 0) {
-                            // Extract data from the response
                             var labels = [];
                             var data = [];
-                            for (var i = 0; i < response.length; i++) {
-                                labels.push(response[i].office);
-                                data.push(Math.round(response[i].event_count));
-                            }
 
-                            // Update the chart with the retrieved data
-                            updateChart(labels, data);
+                            // Process the response to extract labels and data
+                            response.forEach(function(item) {
+                                labels.push(item.role);
+                                data.push(item.appointment_count);
+                            });
+
+                            // Update the chart
+                            updatePolarAreaChart(labels, data);
                         } else {
                             console.error('No data received from the server');
                         }
@@ -601,70 +601,61 @@
                 });
             }
 
-            // Function to update the chart
-            function updateChart(labels, data) {
-                // Define background and hover background colors with transparency
-                var backgroundColors = [
-                    'rgba(78, 115, 223, 0.5)',
-                    'rgba(28, 200, 138, 0.5)',
-                    'rgba(54, 185, 204, 0.5)',
-                    'rgba(255, 193, 7, 0.5)',  // Yellow
-                    'rgba(255, 99, 132, 0.5)', // Red
-                    'rgba(153, 102, 255, 0.5)', // Purple
-                    'rgba(75, 192, 192, 0.5)', // Teal
-                    'rgba(255, 159, 64, 0.5)' // Orange
-                ];
-                var hoverBackgroundColors = [
-                    'rgba(46, 89, 217, 0.5)',
-                    'rgba(23, 166, 115, 0.5)',
-                    'rgba(44, 159, 175, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',  // Yellow
-                    'rgba(255, 99, 132, 0.5)',  // Red
-                    'rgba(153, 102, 255, 0.5)',  // Purple
-                    'rgba(75, 192, 192, 0.5)',  // Teal
-                    'rgba(255, 159, 64, 0.5)'  // Orange
-                ];
-
-                // Get the context of the canvas element
-                var ctx = document.getElementById('myPieChart').getContext('2d');
-
-                // Create new chart instance
-                var myPieChart = new Chart(ctx, {
+            // Function to update the chart as a Polar Area Chart with transparency
+            function updatePolarAreaChart(labels, data) {
+                var ctx = document.getElementById('myPolarAreaChart').getContext('2d');
+                var myPolarAreaChart = new Chart(ctx, {
                     type: 'polarArea',
                     data: {
                         labels: labels,
                         datasets: [{
                             data: data,
-                            backgroundColor: backgroundColors,
-                            hoverBackgroundColor: hoverBackgroundColors,
-                            hoverBorderColor: "rgba(234, 236, 244, 1)",
-                        }],
+                            backgroundColor: [
+                                'rgba(28, 200, 138, 0.5)',  // Green with transparency
+                                'rgba(54, 185, 204, 0.5)',  // Blue with transparency
+                                'rgba(246, 194, 62, 0.5)',  // Yellow with transparency
+                                'rgba(231, 74, 59, 0.5)'    // Red with transparency
+                            ],
+                            hoverBackgroundColor: [
+                                'rgba(23, 166, 115, 0.7)',  // Darker green on hover with more opacity
+                                'rgba(44, 159, 175, 0.7)',  // Darker blue on hover with more opacity
+                                'rgba(244, 182, 25, 0.7)',  // Darker yellow on hover with more opacity
+                                'rgba(224, 45, 27, 0.7)'    // Darker red on hover with more opacity
+                            ],
+                            borderColor: "rgba(234, 236, 244, 1)"
+                        }]
                     },
                     options: {
                         maintainAspectRatio: false,
                         tooltips: {
-                            backgroundColor: 'rgb(255,255,255)',
-                            bodyFontColor: '#858796',
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
                             borderColor: '#dddfeb',
                             borderWidth: 1,
                             xPadding: 15,
                             yPadding: 15,
                             displayColors: true,
-                            caretPadding: 10,
+                            caretPadding: 10
                         },
                         legend: {
+                            position: 'right',
                             display: false
                         },
-                        cutoutPercentage: 80,
-                    },
+                        scale: {
+                            ticks: {
+                                beginAtZero: true,
+                                maxTicksLimit: 5,
+                                backdropColor: 'rgba(255, 255, 255, 0)' // Make the tick backdrop transparent
+                            }
+                        }
+                    }
                 });
             }
 
-            // Call the fetchData function to fetch data and update the chart
-            fetchData();
-
-        }); 
-    </script> -->
+            // Call the fetch function to update the chart on page load
+            fetchAppointmentDistribution();
+        });
+    </script>
     
     </body>
 

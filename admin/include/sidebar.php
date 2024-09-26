@@ -131,6 +131,16 @@
             </li>
 
             <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block my-1">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="reports.php">
+                    <i class="fas fa-fw fa-chart-pie"></i>
+                    <span>Reports</span></a>
+            </li>
+
+            <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Sidebar Toggler (Sidebar) -->
