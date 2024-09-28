@@ -8,7 +8,9 @@ $query = "
         DATE_FORMAT(appointment_date, '%M') AS month, 
         COUNT(*) AS completed_appointments
     FROM appointment_tbl
-    WHERE appointment_status = 'COMPLETED' AND deleted = 0
+    WHERE appointment_status = 'COMPLETED' 
+            AND deleted = 0
+            AND appointment_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
     GROUP BY month(appointment_date)
     ORDER BY appointment_date ASC
 ";
