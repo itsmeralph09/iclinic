@@ -131,6 +131,33 @@
             </li>
 
             <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Manage Inventory
+            </div>
+
+            <!-- Nav Item - Inventory Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#inventoryCollapse"
+                    aria-expanded="true" aria-controls="inventoryCollapse">
+                    <i class="fas fa-fw fa-capsules"></i>
+                    <span>Inventory</span>
+                </a>
+                <div id="inventoryCollapse" class="collapse" aria-labelledby=""
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Inventory</h6>
+                        <a class="collapse-item" href="inventory-items.php">Items</a>
+                        <a class="collapse-item" href="">Approved</a>
+                        <a class="collapse-item" href="">Declined</a>
+                        <a class="collapse-item" href="">Archived</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block my-1">
 
             <!-- Nav Item - Dashboard -->
