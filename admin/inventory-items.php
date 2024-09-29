@@ -121,7 +121,7 @@
                                         </tr>
                                         <?php
                                             $counter++;
-                                            //include('modal/item_modals.php');
+                                            include('modal/item_modals.php');
                                         } 
                                         ?>
                                         </tbody>
@@ -215,7 +215,7 @@
 	            let fieldsAreValid = false; // Initialize as false
 
 	            // Remove existing error classes
-	            $('.form-control').removeClass('input-error');
+	            $('.form-control').removeClass('is-invalid');
 
 	            requiredFields.each(function() {
 	                // Check if the element is a select and it doesn't have a selected value
@@ -354,6 +354,121 @@
                         });
                     }
                 });
+            });
+        });
+    </script>
+
+	<!-- Edit Modal Script -->
+	<script>
+		$(document).ready(function() {
+		    // Appointment Date Validation
+		    $(document).on('change', '[id^="expiry_date_"]', function() {
+		        var inputDate = new Date($(this).val());
+		        var currentDate = new Date();
+
+		        currentDate.setHours(0, 0, 0, 0);
+
+		        if (!$(this).val() || inputDate < currentDate) {
+		            Swal.fire({
+		                icon: 'warning',
+		                title: 'Oops...',
+		                text: 'Please select a valid expiry date.'
+		            });
+		            $(this).addClass('is-invalid');
+		            $(this).val(''); // Clear the input field
+		        } else {
+		            $(this).removeClass('is-invalid');
+		        }
+		    });
+		});
+	</script>
+
+	<!-- Update -->
+    <script>
+        $(document).ready(function() {
+            // Function to show SweetAlert2 messages
+            const showSweetAlert = (icon, title, message) => {
+                Swal.fire({
+                    icon: icon,
+                    title: title,
+                    text: message
+                });
+            };
+
+            // Delegate click event handling to a parent element
+            $(document).on('click', '[id^="updateItem_"]', function(e) {
+                e.preventDefault(); // Prevent default form submission
+                var userID = $(this).attr('id').split('_')[1]; // Extract event ID
+                var formData = $('#updateForm_' + userID); // Get the form data
+                var modalDiv = $('#edit_' + userID);
+
+                let fieldsAreValid = true; // Initialize as true
+                // const requiredFields = formData.find('[required]'); // Select required fields
+                const requiredFields = modalDiv.find(':input[required]'); // Select required fields
+
+                // Remove existing error classes
+                $('.form-control').removeClass('is-invalid');
+
+                requiredFields.each(function() {
+                    // Check if the element is a select and it doesn't have a selected value
+                    if ($(this).is('select') && $(this).val() === null) {
+                        fieldsAreValid = false; // Set to false if any required select field doesn't have a value
+                        showSweetAlert('warning', 'Oops!', 'Please fill-up the required fields.');
+                        $(this).addClass('is-invalid'); // Add red border to missing field
+                    }
+                    // Check if the element is empty
+                    else if ($(this).val().trim() === '') {
+                        fieldsAreValid = false; // Set to false if any required field is empty or null
+                        showSweetAlert('warning', 'Oops!', 'Please fill-up the required fields.');
+                        $(this).addClass('is-invalid'); // Add red border to missing field
+                    } else {
+                        $(this).removeClass('is-invalid'); // Remove red border if field is filled
+                    }
+                });
+
+                // Additional validation for expiry date
+	            var expiryDate = modalDiv.find('#expiry_date_' + userID).val();
+	            if (expiryDate === '' || expiryDate === '0000-00-00' || expiryDate === null) {
+	                fieldsAreValid = false; // Set to false if date is invalid
+	                showSweetAlert('warning', 'Oops!', 'Please select a valid expiry date.');
+	                modalDiv.find('#expiry_date_' + userID).addClass('is-invalid');
+	            } else {
+	            	fieldsAreValid = true;
+	                modalDiv.find('#expiry_date_' + userID).removeClass('is-invalid');
+	            }
+                
+                if (fieldsAreValid) {
+                    $.ajax({
+                        url: 'action/update_item.php', // URL to submit the form data
+                        type: 'POST',
+                        data: formData.serialize(), // Form data to be submitted
+                        dataType: 'json',
+                        success: function(response) {
+                            // Handle the success response
+                            console.log(response); // Output response to console (for debugging)
+                            if (response.status === 'success') {
+                                Swal.fire(
+                                    'Success!',
+                                    response.message,
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle the error response
+                            console.error(xhr.responseText); // Output error response to console (for debugging)
+                            showSweetAlert('error', 'Error', 'Failed to update item. Please try again later.');
+                        }
+                    });
+                }
             });
         });
     </script>
