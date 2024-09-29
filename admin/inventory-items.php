@@ -104,14 +104,24 @@
                                             <td class=""><?php echo $adder_name; ?></td>
                                            
                                             <td class="text-center">
-                                            	<a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#vitals_<?php echo $item_id; ?>">
-                                                    <i class="fa-solid fa-heart-pulse"></i>
+                                            	<a class="btn btn-sm shadow-sm btn-primary" data-toggle="modal" data-target="#edit_<?php echo $item_id; ?>">
+                                                    <i class="fa-solid fa-edit"></i>
+                                                </a>
+                                                <a class="btn btn-sm shadow-sm btn-success" data-toggle="modal" data-target="#plus_<?php echo $item_id; ?>">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-sm shadow-sm btn-danger delete-item-btn"
+                                            		data-item-id="<?php echo $item_id; ?>"
+                                            		data-item-name="<?php echo htmlspecialchars($item_name); ?>" 
+                                            		data-item-quantity="<?php echo htmlspecialchars($quantity_in_stock); ?>" 
+                                            		data-item-adder="<?php echo htmlspecialchars($adder_name); ?>">
+                                                   <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                         <?php
                                             $counter++;
-                                            include('modal/appointment_employee_vitals_modal.php');
+                                            //include('modal/item_modals.php');
                                         } 
                                         ?>
                                         </tbody>
@@ -284,6 +294,69 @@
 	        });
 	    });
 	</script>
+
+	<!-- Delete -->
+    <script>
+        $(document).ready(function() {
+            // Function for deleting event
+            $('.delete-item-btn').on('click', function(e) {
+                e.preventDefault();
+                var deleteButton = $(this);
+                var itemID = deleteButton.data('item-id');
+                var itemName = decodeURIComponent(deleteButton.data('item-name'));
+                var itemQuantity = decodeURIComponent(deleteButton.data('item-quantity'));
+                var itemAdder = decodeURIComponent(deleteButton.data('item-adder'));
+
+                Swal.fire({
+                    title: 'Delete Item',
+                    html: "You are about to delete the following item:<br><br>" +
+                          "<strong>Item Name:</strong> " + itemName + "<br>" +
+                          "<strong>Quantity in stock:</strong> " + itemQuantity + "<br>" +
+                          "<strong>Added by:</strong> " + itemAdder + "<br>",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'action/delete_item.php',
+                            type: 'POST',
+                            data: {
+                                item_id: itemID
+                            },
+                            success: function(response) {
+                                if (response.trim() === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Item has been deleted.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to delete item.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to delete item.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 
