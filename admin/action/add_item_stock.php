@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_query($con, $sql)) {
 
         // Calculate the adjustment amount
-        $adjustment = $quantity - $quantity_in_stock;
+        $adjustment = $new_quantity - $quantity_in_stock;
         $transaction_type = ($adjustment > 0) ? 'STOCKS ADDED' : 'STOCKS REDUCED';
 
         $transaction_date = date('Y-m-d H:i:s');

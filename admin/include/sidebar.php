@@ -150,7 +150,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Inventory</h6>
                         <a class="collapse-item" href="inventory-items.php">Items</a>
-                        <a class="collapse-item" href="">Approved</a>
+                        <a class="collapse-item" href="inventory-stock-transactions.php">Stock Transaction</a>
                         <a class="collapse-item" href="">Declined</a>
                         <a class="collapse-item" href="">Archived</a>
                     </div>
