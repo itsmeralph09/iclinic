@@ -1,5 +1,5 @@
 <?php
-require '../../vendor/autoload.php';
+
 require '../../db/dbconn.php';
 
 // Check if appointment_id is sent via POST
