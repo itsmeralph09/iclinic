@@ -162,6 +162,195 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            // Initialize Selectize for the item dropdown
+            $('#item_name').selectize({
+                placeholder: 'Select an Item',
+                valueField: 'item_id',
+                labelField: 'item_name',
+                searchField: ['item_name'],
+                preload: true,
+                options: [],
+                create: false,
+                onInitialize: function() {
+                    var selectize = this;
+                    $.ajax({
+                        url: 'action/fetch_items.php',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            selectize.addOption(res);
+                            selectize.refreshOptions(false);
+                        },
+                        error: function() {
+                            console.log('Failed to load items.');
+                        }
+                    });
+                },
+                onChange: function(value) {
+                    if (!value.length) return;
+
+                    $.ajax({
+                        url: 'action/fetch_item_details.php',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { item_id: value },
+                        success: function(data) {
+                            if (data.success) {
+                                let stockQuantity = data.quantity_in_stock;
+                                $('#quantity_released').attr('max', stockQuantity);
+                            } else {
+                                console.log('Error: ' + data.message);
+                            }
+                        },
+                        error: function() {
+                            console.log('Failed to fetch item details.');
+                        }
+                    });
+                }
+            });
+
+            // Event listener for "Release Type" dropdown
+            $('#released_type').on('change', function() {
+                var recipientType = $(this).val();
+                var selectizeRecipient = $('#released_to')[0].selectize;
+
+                if (recipientType) {
+                    // Clear previous options in released_to
+                    selectizeRecipient.clearOptions();
+
+                    // Fetch the appropriate data based on the recipient type
+                    $.ajax({
+                        url: 'action/fetch_recipients.php',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { type: recipientType },  // Pass the recipient type to the PHP script
+                        success: function(res) {
+                            // Load the fetched data into the released_to Selectize field
+                            selectizeRecipient.addOption(res);
+                            selectizeRecipient.refreshOptions(false);
+                        },
+                        error: function() {
+                            console.log('Failed to load recipients.');
+                        }
+                    });
+                }
+            });
+
+            // Initialize Selectize for the recipient dropdown
+            $('#released_to').selectize({
+                placeholder: 'Select a Recipient',
+                valueField: 'user_id',
+                labelField: 'full_name',
+                searchField: ['full_name'],
+                preload: false,
+                options: [],
+                create: false
+            });
+
+            // Function to show SweetAlert2 warning message
+            const showWarningMessage = (message) => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: message
+                });
+            };
+
+            // Function to show SweetAlert2 error message for stock validation
+            const showStockErrorMessage = (maxStock) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Insufficient Stock',
+                    text: `The quantity cannot exceed the available stock (${maxStock} items).`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                });
+            };
+
+            $('#ReleaseItem').on('click', function(e) {
+                e.preventDefault(); // Prevent default form submission
+
+                var formData = $('#addNew form'); // Select the form element
+                var quantityReleased = $('#quantity_released').val(); // Get the entered quantity
+                var maxStock = $('#quantity_released').attr('max'); // Get the maximum available stock
+
+                // Check if the entered quantity is higher than available stock
+                if (parseInt(quantityReleased) > parseInt(maxStock)) {
+                    showStockErrorMessage(maxStock); // Show stock error message
+                    $('#quantity_released').addClass('is-invalid'); // Highlight the field
+                    return; // Prevent the form submission
+                }
+
+                const requiredFields = formData.find('[required], select');
+                let fieldsAreValid = false; // Initialize as false
+
+                // Remove existing error classes
+                $('.form-control').removeClass('is-invalid');
+
+                requiredFields.each(function() {
+                    // Check if the element is a select and it doesn't have a selected value
+                    if ($(this).is('select') && $(this).val() === null) {
+                        fieldsAreValid = false; // Set to false if any required select field doesn't have a value
+                        showWarningMessage('Please fill-up the required fields.');
+                        $(this).addClass('is-invalid'); // Add red border to missing field
+                    }
+                    // Check if the element is empty
+                    else if ($(this).val().trim() === '') {
+                        fieldsAreValid = false; // Set to false if any required field is empty
+                        showWarningMessage('Please fill-up the required fields.');
+                        $(this).addClass('is-invalid'); // Add red border to missing field
+                    } else {
+                        fieldsAreValid = true;
+                        $(this).removeClass('is-invalid'); // Remove red border if field is filled
+                    }
+                });
+
+                if (fieldsAreValid) {
+                    // Proceed with form submission if all fields are valid and stock is sufficient
+                    $.ajax({
+                        url: 'action/release_item.php', // URL to submit the form data
+                        type: 'POST',
+                        data: formData.serialize(), // Serialize form data
+                        dataType: 'json',
+                        success: function(response) {
+                            // Handle the success response
+                            console.log(response); // Output response to console (for debugging)
+                            if (response.status === 'success') {
+                                Swal.fire(
+                                    'Success!',
+                                    response.message,
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle the error response
+                            console.error(xhr.responseText); // Output error response to console (for debugging)
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed to release item',
+                                text: 'Please try again later.',
+                                showConfirmButton: true, // Show OK button
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
