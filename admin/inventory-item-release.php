@@ -218,8 +218,9 @@
                 var selectizeRecipient = $('#released_to')[0].selectize;
 
                 if (recipientType) {
-                    // Clear previous options in released_to
-                    selectizeRecipient.clearOptions();
+                    // Clear previous options and selected value in released_to
+                    selectizeRecipient.clear();          // Clears the currently selected value
+                    selectizeRecipient.clearOptions();   // Clears the options list
 
                     // Fetch the appropriate data based on the recipient type
                     $.ajax({
