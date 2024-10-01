@@ -89,12 +89,23 @@
 
                                                     // Format the expiry date
                                                     $formatted_date = date('M d, Y', strtotime($transaction_date));
+
+
+                                                    if ($transaction_type == "STOCKS REDUCED") {
+                                                        $transaction_type_text = "text-danger";
+                                                    } elseif ($transaction_type == "STOCKS ADDED") {
+                                                        $transaction_type_text = "text-success";
+                                                    } elseif ($transaction_type == "STOCKS RELEASED") {
+                                                        $transaction_type_text = "text-primary";
+                                                    } else{
+                                                        $transaction_type_text = "text-secondary";
+                                                    }
                                             ?>
                                         <tr>         
                                             <td class=""><?php echo $counter; ?></td>
                                             <td class=""><?php echo $item_name; ?></td>
-                                            <td class="<?php echo ($quantity > 0) ? 'text-success' : 'text-danger'; ?>"><?php echo $transaction_type; ?></td>
-                                            <td class="<?php echo ($quantity > 0) ? 'text-success' : 'text-danger'; ?>">
+                                            <td class="<?php echo $transaction_type_text; ?>"><?php echo $transaction_type; ?></td>
+                                            <td class="<?php echo $transaction_type_text; ?>">
                                                 <?php echo $quantity; ?>
                                             </td>
                                             <td class=""><?php echo $formatted_date; ?></td>

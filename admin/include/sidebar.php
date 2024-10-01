@@ -152,7 +152,6 @@
                         <a class="collapse-item" href="inventory-items.php">Items</a>
                         <a class="collapse-item" href="inventory-stock-transactions.php">Stock Transaction</a>
                         <a class="collapse-item" href="inventory-item-release.php">Item Release</a>
-                        <a class="collapse-item" href="">Archived</a>
                     </div>
                 </div>
             </li>
