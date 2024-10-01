@@ -75,6 +75,7 @@
                                                                     INNER JOIN `item_tbl` it ON it.item_id = stt.item_id
                                                                     INNER JOIN `user_tbl` ut ON ut.user_id = stt.transaction_by
                                                                     INNER JOIN `admin_tbl` adt ON adt.user_id = ut.user_id
+                                                                    ORDER BY stt.transaction_date DESC
                                                 					";
                                                 $sqlQuery = mysqli_query($con, $display_appointments) or die(mysqli_error($con));
 

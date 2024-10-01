@@ -86,6 +86,7 @@
                                                                     INNER JOIN `admin_tbl` adt ON adt.user_id = ut2.user_id
                                                                     LEFT JOIN `student_tbl` st ON ut1.user_id = st.user_id AND ut1.role = 'STUDENT'
                                                                     LEFT JOIN `employee_tbl` et ON ut1.user_id = et.user_id AND ut1.role = 'EMPLOYEE'
+                                                                    ORDER BY irt.release_date DESC
                                                 					";
                                                 $sqlQuery = mysqli_query($con, $display_appointments) or die(mysqli_error($con));
 
