@@ -167,6 +167,16 @@
             </li>
 
             <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block my-1">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="settings.php">
+                    <i class="fas fa-fw fa-cogs"></i>
+                    <span>Settings</span></a>
+            </li>
+
+            <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Sidebar Toggler (Sidebar) -->
