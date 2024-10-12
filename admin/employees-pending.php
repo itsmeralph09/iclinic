@@ -34,8 +34,16 @@
                         <div class="col-xl-12 col-lg-12">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">List of Pending Employees</h6>
+                                <div class="card-header py-3 d-flex flex-column flex-md-row">
+                                    <div class="col-12 col-md-5 d-flex align-items-center justify-content-start mx-0 px-0 mb-2 mb-md-0">
+                                        <h6 class="font-weight-bold text-primary mb-0">List of Pending Employees</h6>
+                                    </div>
+                                    <div class="col-12 col-md-7 d-flex align-items-center justify-content-end mx-0 px-0">
+                                        <div class="col-12 col-md-8 mx-0 px-0 d-flex flex-column flex-md-row justify-content-end">
+                                            <button class="btn btn-sm btn-success shadow-sm mr-0 mr-md-2 mb-2 mb-md-0 me-md-2 w-100 w-md-auto" id="approveSelectedBtn" disabled>Approve Selected</button>
+                                            <button class="btn btn-sm btn-danger shadow-sm w-100 w-md-auto" id="declineSelectedBtn" disabled>Decline Selected</button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -44,7 +52,10 @@
                                             <thead class="">
                                                 <tr>
                                                   
-                                                    <th scope="col">#</th>                                        
+                                                    <th class="d-flex align-items-center">
+                                                        <input type="checkbox" id="checkAll" class="form-check mr-2">
+                                                        <label class="form-check-label" for="checkAll">Select All</label>
+                                                    </th>                                      
                                                     <th scope="col">Profile</th>                                        
                                                     <th scope="col">Name</th>                                               
                                                     <th scope="col">Occupation</th>                                             
@@ -116,7 +127,10 @@
                                                     $full_name = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] . '' . $suffix;
                                             ?>
                                         <tr>         
-                                            <td class=""><?php echo $counter; ?></td>
+                                            <td class="text-center">
+                                                <input type="checkbox" value="<?php echo $user_id; ?>" name="user_ids[]" id="user_<?php echo $user_id; ?>">
+                                                <label class="form-check-label" for="user_<?php echo $user_id; ?>">Select</label>
+                                            </td>
                                             <td class="d-flex">
                                                 <img class="mx-auto rounded" src="../img/profiles/<?php echo $profile; ?>" alt="Profile Picture" style="width: 60px; height: 60px; object-fit: cover;">
                                             </td>
@@ -182,6 +196,134 @@
     <?php include './include/logout_modal.php'; ?>
 
     <?php include './include/script.php'; ?>
+
+    <script>
+        $(document).ready(function() {
+            // Select buttons
+            const approveSelectedBtn = $('#approveSelectedBtn');
+            const declineSelectedBtn = $('#declineSelectedBtn');
+
+            // Function to check if any checkboxes are selected
+            function updateButtonState() {
+                const anyChecked = $('input[type="checkbox"]:checked').length > 0;
+
+                if (anyChecked) {
+                    approveSelectedBtn.prop('disabled', false); // Enable Approve button
+                    declineSelectedBtn.prop('disabled', false); // Enable Decline button
+                } else {
+                    approveSelectedBtn.prop('disabled', true);  // Disable Approve button
+                    declineSelectedBtn.prop('disabled', true);  // Disable Decline button
+                }
+            }
+
+            // Event listener for individual checkboxes
+            $('input[type="checkbox"]').on('change', function() {
+                updateButtonState(); // Check button state when checkbox is changed
+            });
+
+            // Event listener for "Select All" checkbox
+            $('#checkAll').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('input[type="checkbox"]').prop('checked', isChecked);
+                updateButtonState(); // Check button state when "Select All" is changed
+            });
+
+            // Initially disable buttons if no checkbox is selected
+            updateButtonState();
+
+            // Function to collect selected students' IDs, filtering out invalid values and the "Select All" checkbox
+            function getSelectedStudentIds() {
+                let selectedIds = [];
+                // Iterate through each checked checkbox
+                $('input[type="checkbox"]:checked').each(function() {
+                    const value = $(this).val(); // Get the value (student ID)
+                    // Exclude the "Select All" checkbox and ensure value is not "on"
+                    if (value && value !== "on" && $(this).attr('id') !== 'checkAll') {
+                        selectedIds.push(value); // Collect the valid student ID of the checked checkboxes
+                    }
+                });
+                return selectedIds;
+            }
+
+            // Approve selected students with confirmation
+            approveSelectedBtn.on('click', function() {
+                let selectedIds = getSelectedStudentIds();
+                
+                if (selectedIds.length > 0) {
+                    // Show confirmation prompt with the count of selected students
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to approve ${selectedIds.length} selected employee(s).`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, approve them!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Send selected IDs to the server via AJAX for approval
+                            $.ajax({
+                                url: 'action/approve_selected_employees.php', // Your PHP script to handle approval
+                                type: 'POST',
+                                data: { user_ids: selectedIds }, // Correctly send selected IDs
+                                success: function(response) {
+                                    Swal.fire(
+                                        'Approved!',
+                                        'The selected employees have been approved.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload(); // Reload the page to reflect the updated status
+                                    });
+                                },
+                                error: function() {
+                                    Swal.fire('Error!', 'Failed to approve employees. Please try again later.', 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Decline selected students with confirmation
+            declineSelectedBtn.on('click', function() {
+                let selectedIds = getSelectedStudentIds();
+                
+                if (selectedIds.length > 0) {
+                    // Show confirmation prompt with the count of selected students
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to decline ${selectedIds.length} selected employee(s).`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, decline them!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Send selected IDs to the server via AJAX for declining
+                            $.ajax({
+                                url: 'action/decline_selected_employees.php', // Your PHP script to handle declining
+                                type: 'POST',
+                                data: { user_ids: selectedIds }, // Correctly send selected IDs
+                                success: function(response) {
+                                    Swal.fire(
+                                        'Declined!',
+                                        'The selected employees have been declined.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload(); // Reload the page to reflect the updated status
+                                    });
+                                },
+                                error: function() {
+                                    Swal.fire('Error!', 'Failed to decline employees. Please try again later.', 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function(){
