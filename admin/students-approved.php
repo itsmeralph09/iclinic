@@ -50,6 +50,7 @@
                                                     <th scope="col">Course & Year</th>                                             
                                                     <th scope="col">Contact Info</th>                                           
                                                     <th scope="col">Account Status</th>                                           
+                                                    <th scope="col">Appointment History</th>                                           
                                                     <th scope="col">Action</th>                             
                                                    
                                                 </tr>
@@ -134,6 +135,9 @@
                                                     <td class=""><?php echo $course; ?> - <?php echo $year; ?></td>
                                                     <td class=""><?php echo $contact; ?></td>
                                                     <td class=""><?php echo $status_text; ?></td>
+                                                    <td class="text-center">
+                                                        <a href="students-appointment-history.php?id=<?php echo urlencode($user_id); ?>&name=<?php echo urlencode($full_name) ?>">View History</a>
+                                                    </td>
                                                    
                                                     <td class="text-center">
                                                         <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
