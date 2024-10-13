@@ -130,6 +130,7 @@
                                                    data-user-id="<?php echo $user_id; ?>"
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-no="<?php echo htmlspecialchars($employee_no); ?>"
+                                                   data-user-contact="<?php echo htmlspecialchars($contact); ?>"
                                                    data-user-occupation="<?php echo htmlspecialchars($occupation); ?>">
                                                    <i class="fa-solid fa-check"></i>
                                                 </a>
@@ -194,9 +195,10 @@
                 var userId = approveButton.data('user-id');
                 var userName = decodeURIComponent(approveButton.data('user-name'));
                 var userNo = decodeURIComponent(approveButton.data('user-no'));
+                var userContact = decodeURIComponent(approveButton.data('user-contact'));
                 var userOccupation = decodeURIComponent(approveButton.data('user-occupation'));
                 Swal.fire({
-                    title: 'Approve Student Account Registration',
+                    title: 'Approve Employee Account Registration',
                     html: "You are about to approve the following employee:<br><br>" +
                           "<strong>Name:</strong> " + userName + "<br>" +
                           "<strong>Employee No.:</strong> " + userNo + "<br>" +
@@ -208,17 +210,32 @@
                     confirmButtonText: 'Yes, approve!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Show loading indicator
+                        Swal.fire({
+                            title: 'Processing...',
+                            html: 'Sending SMS, please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Send the AJAX request to approve employee
                         $.ajax({
                             url: 'action/approve_employee.php',
                             type: 'POST',
                             data: {
-                                user_id: userId
+                                user_id: userId,
+                                user_contact: userContact,
+                                user_fullname: userName
                             },
                             success: function(response) {
+                                Swal.close(); // Close the loading indicator
+
                                 if (response.trim() === 'success') {
                                     Swal.fire(
                                         'Approved!',
-                                        'Employee has been approved.',
+                                        'Employee has been approved. An SMS has been sent to notify them.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -232,6 +249,7 @@
                                 }
                             },
                             error: function(xhr, status, error) {
+                                Swal.close(); // Close the loading indicator
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
