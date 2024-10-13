@@ -71,7 +71,13 @@
                                                 require '../db/dbconn.php';
 
                                                 $display_appointments = "
-                                                					SELECT apt.*, CONCAT(st.last_name, ', ', st.first_name, ' ', st.suffix_name) as fullname, CONCAT(st.course, ' - ', 
+                                                					SELECT apt.*,
+                                                                    CONCAT(st.last_name, ', ', st.first_name, 
+                                                                          CASE 
+                                                                              WHEN st.suffix_name = 'NA' THEN '' 
+                                                                              ELSE CONCAT(' ', st.suffix_name) 
+                                                                          END) 
+                                                                    AS fullname, CONCAT(st.course, ' - ', 
                                                                               CASE 
                                                                                  WHEN st.year_level = 1 THEN '1st Year'
                                                                                  WHEN st.year_level = 2 THEN '2nd Year'
