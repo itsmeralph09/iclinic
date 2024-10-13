@@ -17,12 +17,64 @@ if (isset($_POST['user_ids']) && is_array($_POST['user_ids'])) {
 
     // Execute the query
     if (mysqli_query($con, $sql)) {
-        echo 'success'; // Return success message
+        // Fetch the contact numbers for the DECLINED users
+        $contact_query = "SELECT contact_no FROM student_tbl WHERE user_id IN ($user_ids_string)";
+        $result = mysqli_query($con, $contact_query);
+
+        // Collect contact numbers into an array
+        $contacts = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            if (!empty($row['contact_no'])) {
+                $contacts[] = $row['contact_no'];
+            }
+        }
+
+        // Proceed to send bulk SMS if there are contacts
+        if (!empty($contacts)) {
+            $apiKey = '5f7a3eafdbc2beb2f31ce012700445a0'; // Replace with your actual API key
+            $apiUrl = 'https://semaphore.co/api/v4/messages';
+
+            // Prepare parameters for the bulk SMS
+            $parameters = [
+                'apikey' => $apiKey,
+                'number' => implode(',', $contacts), // Comma-separated list of contact numbers
+                'message' => 'Good Day! Your registration for the iClinic - PRMSU Candelaria Clinic Management System has been DECLINED. Kindly contact the iClinic system administrator for more information.',
+                'sendername' => 'iClinicCAND'
+            ];
+
+            // Initialize cURL session
+            $ch = curl_init();
+
+            // Set cURL options
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $apiUrl,
+                CURLOPT_POST => 1,
+                CURLOPT_POSTFIELDS => http_build_query($parameters),
+                CURLOPT_RETURNTRANSFER => true,
+            ]);
+
+            // Execute cURL request
+            $output = curl_exec($ch);
+
+            // Check for errors and handle the response from Semaphore
+            if ($output === FALSE) {
+                // echo 'error'; // Error in sending SMS
+            } else {
+                // echo 'success'; // Successful operation
+            }
+
+            echo 'success'; // Successful operation
+
+            // Close cURL session
+            curl_close($ch);
+        } else {
+            echo 'error'; // No contact numbers found
+        }
     } else {
-        echo 'error'; // Return error message
+        echo 'error'; // Database update error
     }
 } else {
-    echo 'error'; // Return error if no user IDs are provided
+    echo 'error'; // No user IDs provided
 }
 
 // Close the database connection

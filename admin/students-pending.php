@@ -272,24 +272,41 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, approve them!'
+                        confirmButtonText: 'Yes, approve and send SMS!'
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            // Show a preloader while sending SMS
+                            Swal.fire({
+                                title: 'Sending SMS...',
+                                text: 'Please wait while we notify the selected students.',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading(); // Show loading spinner
+                                }
+                            });
+
                             // Send selected IDs to the server via AJAX for approval
                             $.ajax({
                                 url: 'action/approve_selected_students.php', // Your PHP script to handle approval
                                 type: 'POST',
                                 data: { user_ids: selectedIds }, // Correctly send selected IDs
                                 success: function(response) {
-                                    Swal.fire(
-                                        'Approved!',
-                                        'The selected students have been approved.',
-                                        'success'
-                                    ).then(() => {
-                                        location.reload(); // Reload the page to reflect the updated status
-                                    });
+                                    Swal.close(); // Close the preloader
+                                    
+                                    if (response.trim() === 'success') {
+                                        Swal.fire(
+                                            'Approved!',
+                                            'The selected students have been approved and SMS notifications have been sent.',
+                                            'success'
+                                        ).then(() => {
+                                            location.reload(); // Reload the page to reflect the updated status
+                                        });
+                                    } else {
+                                        Swal.fire('Error!', 'Failed to approve students. Please try again later.', 'error');
+                                    }
                                 },
                                 error: function() {
+                                    Swal.close(); // Close the preloader
                                     Swal.fire('Error!', 'Failed to approve students. Please try again later.', 'error');
                                 }
                             });
@@ -311,24 +328,41 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, decline them!'
+                        confirmButtonText: 'Yes, decline and send SMS!'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Send selected IDs to the server via AJAX for declining
+                            // Show a preloader while sending SMS
+                            Swal.fire({
+                                title: 'Sending SMS...',
+                                text: 'Please wait while we notify the selected students.',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading(); // Show loading spinner
+                                }
+                            });
+
+                            // Send selected IDs to the server via AJAX for approval
                             $.ajax({
-                                url: 'action/decline_selected_students.php', // Your PHP script to handle declining
+                                url: 'action/decline_selected_students.php', // Your PHP script to handle approval
                                 type: 'POST',
                                 data: { user_ids: selectedIds }, // Correctly send selected IDs
                                 success: function(response) {
-                                    Swal.fire(
-                                        'Declined!',
-                                        'The selected students have been declined.',
-                                        'success'
-                                    ).then(() => {
-                                        location.reload(); // Reload the page to reflect the updated status
-                                    });
+                                    Swal.close(); // Close the preloader
+                                    
+                                    if (response.trim() === 'success') {
+                                        Swal.fire(
+                                            'Approved!',
+                                            'The selected students have been declined and SMS notifications have been sent.',
+                                            'success'
+                                        ).then(() => {
+                                            location.reload(); // Reload the page to reflect the updated status
+                                        });
+                                    } else {
+                                        Swal.fire('Error!', 'Failed to decline students. Please try again later.', 'error');
+                                    }
                                 },
                                 error: function() {
+                                    Swal.close(); // Close the preloader
                                     Swal.fire('Error!', 'Failed to decline students. Please try again later.', 'error');
                                 }
                             });
