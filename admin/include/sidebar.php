@@ -125,7 +125,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Admins</h6>
                         <a class="collapse-item" href="admins-active.php">Active</a>
-                        <a class="collapse-item" href="admins-archived.php">Archived</a>
+                        <!-- <a class="collapse-item" href="admins-archived.php">Archived</a> -->
                     </div>
                 </div>
             </li>

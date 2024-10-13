@@ -109,7 +109,7 @@
                                                     <td class=""><?php echo $contact; ?></td>
                                                     <td class=""><?php echo $occupation; ?></td>
                                                     <td class="text-center">
-                                                        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a>
+                                                        <!-- <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#view_<?php echo $user_id; ?>"><i class="fa-solid fa-eye"></i></a> -->
                                                         <a href="#" class="btn btn-sm btn-info reset-admin-btn"
                                                            data-user-id="<?php echo $user_id; ?>" 
                                                            data-user-name="<?php echo htmlspecialchars($full_name); ?>"
