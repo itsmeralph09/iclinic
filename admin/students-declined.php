@@ -140,6 +140,7 @@
                                                    data-user-id="<?php echo $user_id; ?>"
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-no="<?php echo htmlspecialchars($student_no); ?>"
+                                                   data-user-contact="<?php echo htmlspecialchars($contact); ?>"
                                                    data-user-course="<?php echo htmlspecialchars($course); ?>">
                                                    <i class="fa-solid fa-check"></i>
                                                 </a>
@@ -197,14 +198,16 @@
     <!-- Approve Students Account Registration -->
     <script>
         $(document).ready(function() {
-            // Function for deleting event
+            // Function for approving student account registration
             $('.approve-student-btn').on('click', function(e) {
                 e.preventDefault();
                 var approveButton = $(this);
                 var userId = approveButton.data('user-id');
                 var userName = decodeURIComponent(approveButton.data('user-name'));
                 var userNo = decodeURIComponent(approveButton.data('user-no'));
+                var userContact = decodeURIComponent(approveButton.data('user-contact'));
                 var userCourse = decodeURIComponent(approveButton.data('user-course'));
+
                 Swal.fire({
                     title: 'Approve Student Account Registration',
                     html: "You are about to approve the following student:<br><br>" +
@@ -218,17 +221,32 @@
                     confirmButtonText: 'Yes, approve!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Show loading indicator
+                        Swal.fire({
+                            title: 'Processing...',
+                            html: 'Sending SMS, please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Send the AJAX request to approve student
                         $.ajax({
-                            url: 'action/approve_student.php', // Corrected 'file' to 'url'
+                            url: 'action/approve_student.php',
                             type: 'POST',
                             data: {
-                                user_id: userId
+                                user_id: userId,
+                                user_contact: userContact,
+                                user_fullname: userName
                             },
                             success: function(response) {
+                                Swal.close(); // Close the loading indicator
+
                                 if (response.trim() === 'success') {
                                     Swal.fire(
                                         'Approved!',
-                                        'Student has been approved.',
+                                        'Student has been approved. An SMS has been sent to notify them.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -242,6 +260,7 @@
                                 }
                             },
                             error: function(xhr, status, error) {
+                                Swal.close(); // Close the loading indicator
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
@@ -255,7 +274,6 @@
             });
         });
     </script>
-
 
 </body>
 
