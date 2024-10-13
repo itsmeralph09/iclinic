@@ -27,27 +27,53 @@
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     </div>
 
-  
                     <div class="row">
-                        <!--Total Pending Events Card -->
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="font-weight-bold text-info text-uppercase mb-1">
+                                                Hello, <span class=""><?= $_SESSION['fullname']; ?>!</span></div>
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800">Welcome to iClinic - PRMSU Candelaria Clinic Management System.</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-house-medical-flag text-info fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <?php
+                            $my_user_id = $_SESSION['user_id']; 
+                        ?>
+                        
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM events WHERE status = 'pending'";
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'STUDENT' AND apt.appointment_status = 'PENDING' AND apt.deleted = 0 AND apt.user_id = '$my_user_id'
+                                ";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_pending = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_pending = mysqli_num_rows($result);
                         ?>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        
+                        <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Pending Events</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "12"; ?></div>
+                                                My Pending Appointments</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_pending ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-hourglass-start text-primary fa-2x"></i>
@@ -57,25 +83,30 @@
                             </div>
                         </div>
 
-                        <!--Total Ongoing Events Card -->
+                        
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM events WHERE status = 'started'";
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'STUDENT' AND apt.appointment_status = 'APPROVED' AND apt.deleted = 0 AND apt.deleted = 0 AND apt.user_id = '$my_user_id'
+                            ";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_started = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_started = mysqli_num_rows($result);
                         ?>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        
+                        <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Ongoing Events</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "12"; ?></div>
+                                                My Approved Appointments</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_started ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-hourglass-half text-success fa-2x"></i>
@@ -85,27 +116,32 @@
                             </div>
                         </div>
 
-                        <!--Total Completed Events Card -->
+                        
                         <?php
 
-                            // require '../db/dbconn.php';
+                            require '../db/dbconn.php';
 
-                            // $sql = "SELECT * FROM events WHERE status = 'closed'";
+                            $sql = "
+                                    SELECT * 
+                                    FROM appointment_tbl apt
+                                    INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
+                                    WHERE ut.role = 'STUDENT' AND apt.appointment_status = 'COMPLETED' AND apt.deleted = 0 AND apt.deleted = 0 AND apt.user_id = '$my_user_id'
+                            ";
 
-                            // $result = mysqli_query($con, $sql);
-                            // $total_closed = mysqli_num_rows($result);
+                            $result = mysqli_query($con, $sql);
+                            $total_closed = mysqli_num_rows($result);
                         ?>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        
+                        <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Completed Events
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">My Completed Appointment
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo "13" ; ?></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $total_closed ?></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -117,122 +153,8 @@
                             </div>
                         </div>
 
-                        <!--Total User Card -->
-                        <?php
-
-                            // require '../db/dbconn.php';
-
-                            // $sql = "SELECT * FROM users WHERE deleted = 0";
-
-                            // $result = mysqli_query($con, $sql);
-                            // $total_user = mysqli_num_rows($result);
-                        ?>
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                               Total Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "12"; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-users fa-2x text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Completed Events Overview</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <!-- <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i> -->
-                                        </a>
-                                        <!-- <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div> -->
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Completed Events</h6>
-                                    <!-- <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div> -->
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            Completed events of each Host Office this month
-                                        </span>
-                                        <!-- <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-                        </div>
-                    </div>
+                    
                 </div>
                 <!-- /.container-fluid -->
 
