@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2024 at 05:05 AM
+-- Generation Time: Oct 13, 2024 at 01:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,15 +34,8 @@ CREATE TABLE `admin_tbl` (
   `middle_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `suffix_name` varchar(20) NOT NULL,
-  `birthdate` date NOT NULL,
-  `age` int(10) NOT NULL,
-  `sex` varchar(20) NOT NULL,
   `contact_no` varchar(12) NOT NULL,
-  `personal_address` varchar(100) NOT NULL,
   `occupation` varchar(100) NOT NULL,
-  `emergency_contact_name` varchar(100) NOT NULL,
-  `emergency_contact_no` varchar(12) NOT NULL,
-  `emergency_contact_address` varchar(100) NOT NULL,
   `profile` varchar(255) NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = deleted, 0 = not deleted'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -51,8 +44,10 @@ CREATE TABLE `admin_tbl` (
 -- Dumping data for table `admin_tbl`
 --
 
-INSERT INTO `admin_tbl` (`admin_id`, `user_id`, `first_name`, `middle_name`, `last_name`, `suffix_name`, `birthdate`, `age`, `sex`, `contact_no`, `personal_address`, `occupation`, `emergency_contact_name`, `emergency_contact_no`, `emergency_contact_address`, `profile`, `deleted`) VALUES
-(4, 15, 'FRIEDA', 'TREVOR', 'REISS', 'NA', '2001-05-09', 23, 'FEMALE', '09111111111', 'ILANG ILANG STREET', 'STAFF', 'RALPH CUSTODIO', '09222222222', 'PUROK 6, TAUGTOG, BOTOLAN, ZAMBALES', 'REISS_15_20240713023617.png', 0);
+INSERT INTO `admin_tbl` (`admin_id`, `user_id`, `first_name`, `middle_name`, `last_name`, `suffix_name`, `contact_no`, `occupation`, `profile`, `deleted`) VALUES
+(4, 15, 'FRIEDA', 'TREVOR', 'REISS', 'NA', '09111111111', 'STAFF', 'prmsu_cande.png', 0),
+(5, 20, 'ADMINIS', 'IS', 'TRAITOR', 'SR', '09454866758', 'ADMIN', '', 0),
+(6, 21, 'ADMINIS', 'IS', 'TRAITOR', 'SR', '09454866758', 'ADMIN', '', 0);
 
 -- --------------------------------------------------------
 
@@ -83,7 +78,9 @@ INSERT INTO `appointment_tbl` (`appointment_id`, `appointment_no`, `appointment_
 (10, 'APT-20240909-16-c02b', 'OTHERS', 'TEST', '2024-09-09', 'COMPLETED', 16, 0),
 (11, 'APT-20240804-14-e6a4', 'OTHERS', 'TEST 2AAA', '2024-07-09', 'COMPLETED', 14, 0),
 (12, 'APT-20241001-14-55c6', 'DENTAL CHECKUP', 'NONE', '2024-10-01', 'COMPLETED', 14, 0),
-(13, 'APT-20241003-16-d7f3', 'DENTAL CONSULTATION', 'NONE', '2024-10-03', 'COMPLETED', 16, 0);
+(13, 'APT-20241003-16-d7f3', 'DENTAL CONSULTATION', 'NONE', '2024-10-03', 'COMPLETED', 16, 0),
+(14, 'APT-20241014-16-d3eb', 'MEDICAL CHECKUP', 'NONE', '2024-10-14', 'APPROVED', 16, 0),
+(15, 'APT-20241014-14-9f75', 'OTHERS', 'CONSULTATION', '2024-10-14', 'APPROVED', 14, 0);
 
 -- --------------------------------------------------------
 
@@ -312,10 +309,12 @@ CREATE TABLE `user_tbl` (
 INSERT INTO `user_tbl` (`user_id`, `no`, `email`, `password`, `role`, `status`, `deleted`) VALUES
 (14, '20-00237', 'ralphcustodio@proton.me', '$2y$10$Ik0x7voh7NKupx/yrvH3eeWe5FQnZh5WuLhuxjNIeL37A5dzgbnCi', 'STUDENT', 'APPROVED', 0),
 (15, '20-00238', 'friedareiss@proton.me', '$2y$10$SaHjeR0XMwNrCoKfKC0E0e/krZcqiaInVi7SwlsTXZocJ5vp3WjJi', 'ADMIN', 'APPROVED', 0),
-(16, '20-00239', 'gojosaturo@gmail.com', '$2y$10$/vFrWeidquBhhnX37oNHx.jhfnbFxL/wlmlorMTWbyq6x/LMSq7tO', 'EMPLOYEE', 'DECLINED', 0),
+(16, '20-00239', 'gojosaturo@gmail.com', '$2y$10$/vFrWeidquBhhnX37oNHx.jhfnbFxL/wlmlorMTWbyq6x/LMSq7tO', 'EMPLOYEE', 'APPROVED', 0),
 (17, '20-00232', 'leviackerman@gmail.com', '$2y$10$YCX5NLhGjcT2tQeWhhOQhOSFkD/Qi1wuCXDPsrnLCuH2IM0mJRiCC', 'STUDENT', 'DECLINED', 0),
 (18, '20-00233', 'leviackerman@gmail.com2', '$2y$10$YCX5NLhGjcT2tQeWhhOQhOSFkD/Qi1wuCXDPsrnLCuH2IM0mJRiCC', 'STUDENT', 'DECLINED', 0),
-(19, '20-00240', 'gojosaturo@gmail.com', '$2y$10$/vFrWeidquBhhnX37oNHx.jhfnbFxL/wlmlorMTWbyq6x/LMSq7tO', 'EMPLOYEE', 'DECLINED', 0);
+(19, '20-00240', 'gojosaturo@gmail.com', '$2y$10$/vFrWeidquBhhnX37oNHx.jhfnbFxL/wlmlorMTWbyq6x/LMSq7tO', 'EMPLOYEE', 'DECLINED', 0),
+(20, '20-00269', 'admin@gmail.com', '$2y$10$dTXIhRrIzIRfwhKZDllukOpBZtzPXbsE1qnHY2wijftwEL4EItiQa', 'ADMIN', 'APPROVED', 0),
+(21, '20-00270', 'admin2@gmail.com', '$2y$10$piPwfLSuwXUMuUcY4Xwuo.OkgQCzwIY0DDtkN1.AGaoBAz6EUhP76', 'ADMIN', 'APPROVED', 0);
 
 --
 -- Indexes for dumped tables
@@ -389,13 +388,13 @@ ALTER TABLE `user_tbl`
 -- AUTO_INCREMENT for table `admin_tbl`
 --
 ALTER TABLE `admin_tbl`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `appointment_tbl`
 --
 ALTER TABLE `appointment_tbl`
-  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `appointment_vitals_tbl`
@@ -443,7 +442,7 @@ ALTER TABLE `student_tbl`
 -- AUTO_INCREMENT for table `user_tbl`
 --
 ALTER TABLE `user_tbl`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
