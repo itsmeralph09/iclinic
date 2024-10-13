@@ -80,7 +80,7 @@
                                         <label class="control-label modal-label" for="appointment_temperature_<?php echo $appointment_id; ?>">Temperature</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="appointment_temperature_<?php echo $appointment_id; ?>" name="appointment_temperature" value="" required>
+                                        <input type="number" class="form-control" id="appointment_temperature_<?php echo $appointment_id; ?>" name="appointment_temperature" value="" >
                                         <div class="invalid-feedback">
                                             Please input a valid Temperature
                                         </div>
@@ -95,7 +95,7 @@
                                         <label class="control-label modal-label" for="appointment_weight_<?php echo $appointment_id; ?>">Weight (kg)</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="appointment_weight_<?php echo $appointment_id; ?>" name="appointment_weight" value="" required>
+                                        <input type="number" class="form-control" id="appointment_weight_<?php echo $appointment_id; ?>" name="appointment_weight" value="" >
                                         <div class="invalid-feedback">
                                             Please input a valid Weight
                                         </div>
@@ -108,7 +108,7 @@
                                         <label class="control-label modal-label" for="appointment_height_<?php echo $appointment_id; ?>">Height (cm)</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="appointment_height_<?php echo $appointment_id; ?>" name="appointment_height" value="" required>
+                                        <input type="number" class="form-control" id="appointment_height_<?php echo $appointment_id; ?>" name="appointment_height" value="" >
                                         <div class="invalid-feedback">
                                             Please input a valid Height
                                         </div>
