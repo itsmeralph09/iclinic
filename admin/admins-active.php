@@ -54,6 +54,7 @@
                                                     <th scope="col">#</th>                                        
                                                     <!-- <th scope="col">Profile</th>                                         -->
                                                     <th scope="col">Name</th>                                                                                         
+                                                    <th scope="col">Employee No</th>                                                                                         
                                                     <th scope="col">Contact Info</th>                                           
                                                     <th scope="col">Occupation</th>                                                                                  
                                                     <th scope="col">Action</th>                             
@@ -104,6 +105,7 @@
                                                         <img class="mx-auto rounded" src="../img/profiles/<?php echo $profile; ?>" alt="Profile Picture" style="width: 60px; height: 60px; object-fit: cover;">
                                                     </td> -->
                                                     <td class=""><?php echo $full_name; ?></td>
+                                                    <td class=""><?php echo $admin_no; ?></td>
                                                     <td class=""><?php echo $contact; ?></td>
                                                     <td class=""><?php echo $occupation; ?></td>
                                                     <td class="text-center">
@@ -172,11 +174,11 @@
         });
     </script>
 
-    <!-- Decline Students Account Registration -->
+    <!-- Delete Admin Account -->
     <script>
         $(document).ready(function() {
             // Function for deleting event
-            $('.delete-student-btn').on('click', function(e) {
+            $('.delete-admin-btn').on('click', function(e) {
                 e.preventDefault();
                 var declineButton = $(this);
                 var userId = declineButton.data('user-id');
@@ -232,11 +234,11 @@
         });
     </script>
 
-    <!-- Reset Student Password -->
+    <!-- Reset Admin Password -->
     <script>
         $(document).ready(function() {
             // Function for resetting password
-            $('.reset-student-btn').on('click', function(e) {
+            $('.reset-admin-btn').on('click', function(e) {
                 e.preventDefault();
                 var resetButton = $(this);
                 var userId = resetButton.data('user-id');
@@ -248,10 +250,9 @@
                 Swal.fire({
                     title: 'Reset Password',
                     html:
-                        "<p>You are about to reset the password for the following student:</p>" +
+                        "<p>You are about to reset the password for the following admin:</p>" +
                         "<strong>Name:</strong> " + userName + "<br>" +
-                        "<strong>Student No.:</strong> " + userNo + "<br>" +
-                        "<strong>Course:</strong> " + userCourse + "<br><br>" +
+                        "<strong>Employee No.:</strong> " + userNo + "<br>" +
                         '<input type="password" id="newPassword" class="swal2-input" placeholder="New Password">' +
                         '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">',
                     icon: 'warning',
