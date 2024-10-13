@@ -70,7 +70,12 @@
                                                 require '../db/dbconn.php';
 
                                                 $display_appointments = "
-                                                					SELECT apt.*, CONCAT(st.last_name, ', ', st.first_name, ' ', st.suffix_name) as fullname, st.occupation
+                                                					SELECT apt.*,CONCAT(st.last_name, ', ', st.first_name, 
+                                                                          CASE 
+                                                                              WHEN st.suffix_name = 'NA' THEN '' 
+                                                                              ELSE CONCAT(' ', st.suffix_name) 
+                                                                          END) 
+                                                                    AS fullname, st.occupation
 																	FROM appointment_tbl apt
 																	INNER JOIN user_tbl ut ON ut.user_id = apt.user_id
 																	INNER JOIN employee_tbl st ON st.user_id = ut.user_id
