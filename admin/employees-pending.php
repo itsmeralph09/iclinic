@@ -145,6 +145,7 @@
                                                    data-user-id="<?php echo $user_id; ?>"
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-no="<?php echo htmlspecialchars($employee_no); ?>"
+                                                   data-user-contact="<?php echo htmlspecialchars($contact); ?>"
                                                    data-user-occupation="<?php echo htmlspecialchars($occupation); ?>">
                                                    <i class="fa-solid fa-check"></i>
                                                 </a>
@@ -152,6 +153,7 @@
                                                    data-user-id="<?php echo $user_id; ?>" 
                                                    data-user-name="<?php echo htmlspecialchars($full_name); ?>"
                                                    data-user-no="<?php echo htmlspecialchars($employee_no); ?>"
+                                                   data-user-contact="<?php echo htmlspecialchars($contact); ?>"
                                                    data-user-occupation="<?php echo htmlspecialchars($occupation); ?>">
                                                    <i class="fa-solid fa-xmark"></i>
                                                 </a>
@@ -344,6 +346,7 @@
                 var userId = declineButton.data('user-id');
                 var userName = decodeURIComponent(declineButton.data('user-name'));
                 var userNo = decodeURIComponent(declineButton.data('user-no'));
+                var userContact = decodeURIComponent(declineButton.data('user-contact'));
                 var userOccupation = decodeURIComponent(declineButton.data('user-occupation'));
                 Swal.fire({
                     title: 'Decline Employee Account Registration',
@@ -358,17 +361,32 @@
                     confirmButtonText: 'Yes, decline!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Show loading indicator
+                        Swal.fire({
+                            title: 'Processing...',
+                            html: 'Sending SMS, please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Send the AJAX request to decline employee
                         $.ajax({
                             url: 'action/decline_employee.php',
                             type: 'POST',
                             data: {
-                                user_id: userId
+                                user_id: userId,
+                                user_contact: userContact,
+                                user_fullname: userName
                             },
                             success: function(response) {
+                                Swal.close(); // Close the loading indicator
+
                                 if (response.trim() === 'success') {
                                     Swal.fire(
-                                        'Declined!',
-                                        'Employee has been declined.',
+                                        'Approved!',
+                                        'Employee has been declined. An SMS has been sent to notify them.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -382,6 +400,7 @@
                                 }
                             },
                             error: function(xhr, status, error) {
+                                Swal.close(); // Close the loading indicator
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
@@ -406,6 +425,7 @@
                 var userId = approveButton.data('user-id');
                 var userName = decodeURIComponent(approveButton.data('user-name'));
                 var userNo = decodeURIComponent(approveButton.data('user-no'));
+                var userContact = decodeURIComponent(approveButton.data('user-contact'));
                 var userOccupation = decodeURIComponent(approveButton.data('user-occupation'));
                 Swal.fire({
                     title: 'Approve Employee Account Registration',
@@ -420,17 +440,32 @@
                     confirmButtonText: 'Yes, approve!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Show loading indicator
+                        Swal.fire({
+                            title: 'Processing...',
+                            html: 'Sending SMS, please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Send the AJAX request to approve employee
                         $.ajax({
-                            url: 'action/approve_employee.php', // Corrected 'file' to 'url'
+                            url: 'action/approve_employee.php',
                             type: 'POST',
                             data: {
-                                user_id: userId
+                                user_id: userId,
+                                user_contact: userContact,
+                                user_fullname: userName
                             },
                             success: function(response) {
+                                Swal.close(); // Close the loading indicator
+
                                 if (response.trim() === 'success') {
                                     Swal.fire(
                                         'Approved!',
-                                        'Employee has been approved.',
+                                        'Employee has been approved. An SMS has been sent to notify them.',
                                         'success'
                                     ).then(() => {
                                         location.reload();
@@ -444,6 +479,7 @@
                                 }
                             },
                             error: function(xhr, status, error) {
+                                Swal.close(); // Close the loading indicator
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error!',
