@@ -47,10 +47,10 @@
                                     ?>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">
+                                <!-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile Info
-                                </a>
+                                </a> -->
                                 <a class="dropdown-item" id="resetPassBtn" href="#" data-user-id="<?php echo $_SESSION['user_id']; ?>">
                                     <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Update Password
