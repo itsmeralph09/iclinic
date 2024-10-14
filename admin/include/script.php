@@ -37,6 +37,143 @@
             }
         });
     </script>
+
+    <!-- Update Password -->
+    <script>
+        $(document).ready(function() {
+            // Function for resetting password
+            $('#resetPassBtn').on('click', function(e) {
+                e.preventDefault();
+                var resetButton = $(this);
+                var userId = resetButton.data('user-id');
+
+                // SweetAlert2 form to confirm current password
+                Swal.fire({
+                    title: 'Confirm Current Password',
+                    html:
+                        "<p>Please enter your current password:</p>" +
+                        '<input type="password" id="currentPassword" class="swal2-input" placeholder="Current Password">',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirm',
+                    allowOutsideClick: false, // Disable outside click
+                    preConfirm: () => {
+                        const currentPassword = Swal.getPopup().querySelector('#currentPassword').value;
+                        if (!currentPassword) {
+                            Swal.showValidationMessage(`Please enter your current password`);
+                        }
+                        return { currentPassword: currentPassword };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var currentPassword = result.value.currentPassword;
+
+                        // Perform AJAX request to verify the current password
+                        $.ajax({
+                            url: 'action/verify_current_password.php', // Backend script to handle password verification
+                            type: 'POST',
+                            data: {
+                                user_id: userId,
+                                password: currentPassword
+                            },
+                            success: function(response) {
+                                if (response.trim() === 'verified') {
+                                    // If verified, prompt for the new password
+                                    Swal.fire({
+                                        title: 'Update Password',
+                                        html:
+                                            "<p>Enter your new password:</p>" +
+                                            '<input type="password" id="newPassword" class="swal2-input" placeholder="New Password">' +
+                                            '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Update Password',
+                                        allowOutsideClick: false, // Disable outside click
+                                        preConfirm: () => {
+                                            const newPassword = Swal.getPopup().querySelector('#newPassword').value;
+                                            const confirmPassword = Swal.getPopup().querySelector('#confirmPassword').value;
+                                            if (!newPassword || !confirmPassword) {
+                                                Swal.showValidationMessage(`Please enter both password fields`);
+                                            } else if (newPassword !== confirmPassword) {
+                                                Swal.showValidationMessage(`Passwords do not match`);
+                                            }
+                                            return { newPassword: newPassword };
+                                        }
+                                    }).then((newPasswordResult) => {
+                                        if (newPasswordResult.isConfirmed) {
+                                            var newPassword = newPasswordResult.value.newPassword;
+
+                                            // Show an additional confirmation step
+                                            Swal.fire({
+                                                title: 'Confirm Password Update',
+                                                text: "Are you sure you want to update your password?",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Yes, update it!',
+                                                cancelButtonText: 'Cancel',
+                                                allowOutsideClick: false // Disable outside click
+                                            }).then((confirmResult) => {
+                                                if (confirmResult.isConfirmed) {
+                                                    // Perform AJAX request to update the password in the backend
+                                                    $.ajax({
+                                                        url: 'action/reset_password.php', // Backend script to handle password reset
+                                                        type: 'POST',
+                                                        data: {
+                                                            user_id: userId,
+                                                            password: newPassword
+                                                        },
+                                                        success: function(response) {
+                                                            if (response.trim() === 'success') {
+                                                                Swal.fire(
+                                                                    'Password Updated!',
+                                                                    'The password has been updated successfully.',
+                                                                    'success'
+                                                                );
+                                                            } else {
+                                                                Swal.fire(
+                                                                    'Error!',
+                                                                    'Failed to update password.',
+                                                                    'error'
+                                                                );
+                                                            }
+                                                        },
+                                                        error: function(xhr, status, error) {
+                                                            console.error(xhr.responseText);
+                                                            Swal.fire(
+                                                                'Error!',
+                                                                'Failed to update password.',
+                                                                'error'
+                                                            );
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    // If verification fails
+                                    Swal.fire(
+                                        'Error!',
+                                        'Current password is incorrect.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to verify current password.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function(){
             $("#logoutBtn").click(function(e){
